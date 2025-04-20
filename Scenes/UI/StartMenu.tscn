@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://bu450rk54y3ll"]
 
 [ext_resource type="Shader" uid="uid://bcid4rv3uq84q" path="res://Scenes/Shaders/BattleShaders/Water.gdshader" id="1_7sc2f"]
-[ext_resource type="Theme" uid="uid://bpojdg8qdwfo1" path="res://GeneralUILooks&Themes/tempTheme.tres" id="1_r73nm"]
+[ext_resource type="PackedScene" uid="uid://c3mjm61irkmkq" path="res://Scenes/UI/main_menu.tscn" id="2_7sc2f"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_omsb3"]
 sky_top_color = Color(0.192209, 0.61834, 0.896268, 1)
@@ -119,48 +119,4 @@ size = Vector3(1, 25, 75)
 mesh = SubResource("PlaneMesh_cyf88")
 skeleton = NodePath("../..")
 
-[node name="Menu" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Menu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 50
-theme_override_constants/margin_top = 50
-theme_override_constants/margin_right = 50
-theme_override_constants/margin_bottom = 50
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Menu/MarginContainer"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="Menu/MarginContainer/VBoxContainer"]
-texture_filter = 4
-layout_mode = 2
-theme = ExtResource("1_r73nm")
-text = "3D Fighting Demo"
-
-[node name="Fight" type="Button" parent="Menu/MarginContainer/VBoxContainer"]
-texture_filter = 4
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("1_r73nm")
-text = "Fight!"
-alignment = 0
-
-[node name="Options" type="Button" parent="Menu/MarginContainer/VBoxContainer"]
-texture_filter = 4
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("1_r73nm")
-text = "Options
-"
-alignment = 0
+[node name="MainMenu" parent="." instance=ExtResource("2_7sc2f")]
