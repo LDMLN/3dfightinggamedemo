@@ -1,7 +1,8 @@
-[gd_scene load_steps=20 format=3 uid="uid://d0pty7blxma1u"]
+[gd_scene load_steps=21 format=3 uid="uid://d0pty7blxma1u"]
 
 [ext_resource type="Script" uid="uid://cwbj4huj6utgq" path="res://Scenes/Battle/Battle.cs" id="1_ael4v"]
 [ext_resource type="Shader" uid="uid://bcid4rv3uq84q" path="res://Scenes/Shaders/BattleShaders/Water.gdshader" id="2_gunap"]
+[ext_resource type="PackedScene" uid="uid://dkee6s1qas0l" path="res://Scenes/Battle/Characters/Character.tscn" id="3_3ihc8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ael4v"]
 sky_top_color = Color(0.192209, 0.61834, 0.896268, 1)
@@ -122,14 +123,9 @@ size = Vector3(1, 25, 75)
 mesh = SubResource("PlaneMesh_dcr6b")
 skeleton = NodePath("../..")
 
-[node name="Player1Standin (should be own scene)" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.59732, 4.2519, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player1Standin (should be own scene)"]
-shape = SubResource("CapsuleShape3D_07e4u")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player1Standin (should be own scene)"]
-mesh = SubResource("CapsuleMesh_tmq01")
+[node name="Character" parent="." node_paths=PackedStringArray("enemyCharacter") instance=ExtResource("3_3ihc8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4802, 4.2519, 0)
+enemyCharacter = NodePath("../Player2Standin (should be own scene)")
 
 [node name="Player2Standin (should be own scene)" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.56735, 4.2519, 0)

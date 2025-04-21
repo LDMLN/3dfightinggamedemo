@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkee6s1qas0l"]
+
+[ext_resource type="Script" uid="uid://b3klqhmhvv2ja" path="res://Scenes/Battle/Characters/Shared/Scripts/Character.cs" id="1_m7y5v"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dolrw"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_m7y5v"]
+
+[node name="Character" type="CharacterBody3D"]
+script = ExtResource("1_m7y5v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_dolrw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_m7y5v")
