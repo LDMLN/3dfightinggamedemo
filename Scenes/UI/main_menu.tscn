@@ -1,0 +1,136 @@
+[gd_scene load_steps=8 format=3 uid="uid://c3mjm61irkmkq"]
+
+[ext_resource type="FontFile" uid="uid://cajb5nas2nr0u" path="res://GeneralUILooks&Themes/Exo-Bold.ttf" id="1_5wsvm"]
+[ext_resource type="Script" uid="uid://b7fu16cbe058r" path="res://Scripts/MainMenu.cs" id="1_o14dv"]
+[ext_resource type="FontFile" uid="uid://bs2jq24et147r" path="res://GeneralUILooks&Themes/Exo-Regular.ttf" id="2_i2xx2"]
+[ext_resource type="Script" uid="uid://b07r68s2swqis" path="res://Scripts/MenuTab.cs" id="2_mrfpk"]
+[ext_resource type="Script" uid="uid://ccwwy14heluji" path="res://Scripts/MenuSwap.cs" id="5_4pqbp"]
+[ext_resource type="Script" uid="uid://dj3vfkxrkvrh7" path="res://Scenes/UI/LoadScene.cs" id="5_gih0s"]
+[ext_resource type="PackedScene" uid="uid://d0pty7blxma1u" path="res://Scenes/Battle/Battle.tscn" id="6_gih0s"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o14dv")
+
+[node name="MenuTab" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_mrfpk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuTab"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Seperator" type="Control" parent="MenuTab/VBoxContainer"]
+layout_mode = 2
+
+[node name="GameTitle" type="Label" parent="MenuTab/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("1_5wsvm")
+theme_override_font_sizes/font_size = 64
+text = "GAME TITLE TBD"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuTab"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuTab/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="Seperator2" type="Control" parent="MenuTab/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seperator3" type="Control" parent="MenuTab/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="StartGameButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_i2xx2")
+theme_override_font_sizes/font_size = 30
+text = "Fight!"
+script = ExtResource("5_gih0s")
+sceneToSwitchTo = ExtResource("6_gih0s")
+
+[node name="OptionsButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer" node_paths=PackedStringArray("SwitchToMenu")]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_i2xx2")
+theme_override_font_sizes/font_size = 30
+text = "Options"
+script = ExtResource("5_4pqbp")
+SwitchToMenu = NodePath("../../../../MenuTab2")
+
+[node name="ExitButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_i2xx2")
+theme_override_font_sizes/font_size = 30
+text = "Exit"
+
+[node name="MenuTab2" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_mrfpk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuTab2"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Seperator" type="Control" parent="MenuTab2/VBoxContainer"]
+layout_mode = 2
+
+[node name="OptionsTitle" type="Label" parent="MenuTab2/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("1_5wsvm")
+theme_override_font_sizes/font_size = 64
+text = "Options"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuTab2"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuTab2/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="Seperator2" type="Control" parent="MenuTab2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seperator3" type="Control" parent="MenuTab2/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ReturnButton" type="Button" parent="MenuTab2/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_i2xx2")
+theme_override_font_sizes/font_size = 30
+text = "Return"
+
+[connection signal="pressed" from="MenuTab/HBoxContainer/VBoxContainer/ExitButton" to="." method="OnQuitGameBtnPressed"]
+[connection signal="pressed" from="MenuTab2/HBoxContainer/VBoxContainer/ReturnButton" to="MenuTab2" method="OnMenuReturnButtonPressed"]
