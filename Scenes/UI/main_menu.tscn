@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://c3mjm61irkmkq"]
+[gd_scene load_steps=8 format=3 uid="uid://c3mjm61irkmkq"]
 
 [ext_resource type="FontFile" uid="uid://cajb5nas2nr0u" path="res://GeneralUILooks&Themes/Exo-Bold.ttf" id="1_5wsvm"]
 [ext_resource type="Script" uid="uid://b7fu16cbe058r" path="res://Scripts/MainMenu.cs" id="1_o14dv"]
 [ext_resource type="FontFile" uid="uid://bs2jq24et147r" path="res://GeneralUILooks&Themes/Exo-Regular.ttf" id="2_i2xx2"]
 [ext_resource type="Script" uid="uid://b07r68s2swqis" path="res://Scripts/MenuTab.cs" id="2_mrfpk"]
 [ext_resource type="Script" uid="uid://ccwwy14heluji" path="res://Scripts/MenuSwap.cs" id="5_4pqbp"]
+[ext_resource type="Script" uid="uid://dj3vfkxrkvrh7" path="res://Scenes/UI/LoadScene.cs" id="5_gih0s"]
+[ext_resource type="PackedScene" uid="uid://d0pty7blxma1u" path="res://Scenes/Battle/Battle.tscn" id="6_gih0s"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -62,6 +64,8 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_i2xx2")
 theme_override_font_sizes/font_size = 30
 text = "Fight!"
+script = ExtResource("5_gih0s")
+sceneToSwitchTo = ExtResource("6_gih0s")
 
 [node name="OptionsButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer" node_paths=PackedStringArray("SwitchToMenu")]
 custom_minimum_size = Vector2(120, 32)
@@ -128,4 +132,5 @@ theme_override_fonts/font = ExtResource("2_i2xx2")
 theme_override_font_sizes/font_size = 30
 text = "Return"
 
+[connection signal="pressed" from="MenuTab/HBoxContainer/VBoxContainer/ExitButton" to="." method="OnQuitGameBtnPressed"]
 [connection signal="pressed" from="MenuTab2/HBoxContainer/VBoxContainer/ReturnButton" to="MenuTab2" method="OnMenuReturnButtonPressed"]

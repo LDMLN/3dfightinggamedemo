@@ -30,4 +30,9 @@ public partial class MainMenu : Control
         GetTree().Root.AddChild(loadScene.Instantiate());
         QueueFree();
     }
+
+    // function to quit game
+    public void OnQuitGameBtnPressed(){
+        GetTree().Quit();
+    }
 }
