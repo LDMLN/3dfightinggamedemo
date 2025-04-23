@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpi0k5j3ox765"]
+
+[ext_resource type="PackedScene" uid="uid://bu450rk54y3ll" path="res://Scenes/UI/StartMenu.tscn" id="1_bbe6k"]
+[ext_resource type="Script" uid="uid://bnwvd0bna2q7c" path="res://Scenes/GameController/Game.cs" id="1_w23m7"]
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_w23m7")
+
+[node name="StartMenu" parent="." instance=ExtResource("1_bbe6k")]

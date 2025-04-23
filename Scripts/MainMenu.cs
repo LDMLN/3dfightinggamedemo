@@ -7,6 +7,17 @@ public partial class MainMenu : Control
 {
     //Holds indexes of menus
     List<int> goBacklist = new();
+    private Game gameController;
+
+    public override void _Ready()
+    {
+        base._Ready();
+
+        // set up gameController
+        if(GetParent().GetParent() is Game){
+			gameController = GetParent().GetParent() as Game;
+		}
+    }
 
     // function to go to other menus
     public void SwapMenu(int menuIndex, int returnIndex){
@@ -26,9 +37,13 @@ public partial class MainMenu : Control
     }
 
     // function to load a scene (function to load in game)
+    // public void OnSwapScene(PackedScene loadScene){
+    //     GetTree().Root.AddChild(loadScene.Instantiate());
+    //     QueueFree();
+    // }
+
     public void OnSwapScene(PackedScene loadScene){
-        GetTree().Root.AddChild(loadScene.Instantiate());
-        QueueFree();
+        gameController.SceneChange(loadScene);
     }
 
     // function to quit game
