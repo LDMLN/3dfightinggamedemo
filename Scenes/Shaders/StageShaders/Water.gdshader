@@ -18,7 +18,7 @@ void vertex() {
 	combined_noise = pow(noise_color * noise_color_reverse, vec4(1.25f));
 	VERTEX = combined_noise.rgb * NORMAL * 5.0f + VERTEX;
 	// Called for every vertex the material is visible on.
-	
+
 }
 
 //general idea for this shader came from the following two tutorials mixed together:

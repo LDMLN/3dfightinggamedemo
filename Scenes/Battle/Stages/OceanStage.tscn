@@ -1,0 +1,190 @@
+[gd_scene load_steps=24 format=3 uid="uid://bkpslchvx6d17"]
+
+[ext_resource type="Script" uid="uid://bom3fn1upm3wj" path="res://Scenes/Battle/Stages/Stage.cs" id="1_qcs6y"]
+[ext_resource type="Shader" uid="uid://bcid4rv3uq84q" path="res://Scenes/Shaders/StageShaders/Water.gdshader" id="1_vbyq6"]
+[ext_resource type="Shader" uid="uid://deusv5gw0luye" path="res://Scenes/Shaders/StageShaders/InvisibleWall.gdshader" id="2_qcs6y"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ael4v"]
+sky_top_color = Color(0.192209, 0.61834, 0.896268, 1)
+sky_horizon_color = Color(1, 1, 1, 1)
+
+[sub_resource type="Sky" id="Sky_gunap"]
+sky_material = SubResource("ProceduralSkyMaterial_ael4v")
+
+[sub_resource type="Environment" id="Environment_3ihc8"]
+background_mode = 2
+sky = SubResource("Sky_gunap")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ael4v"]
+albedo_color = Color(0.392157, 0.392157, 0.392157, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gunap"]
+albedo_color = Color(0.576471, 0.2, 0.572549, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3ihc8"]
+albedo_color = Color(0.577787, 0.200914, 0.574019, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_odh8s"]
+albedo_color = Color(0.692699, 0.503308, 0.131559, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rremj"]
+albedo_color = Color(0.694118, 0.501961, 0.133333, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g1sps"]
+albedo_color = Color(0.694118, 0.501961, 0.133333, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_3ihc8"]
+noise_type = 2
+fractal_type = 0
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_odh8s"]
+seamless = true
+noise = SubResource("FastNoiseLite_3ihc8")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_odh8s"]
+noise_type = 2
+seed = 4
+fractal_type = 0
+cellular_distance_function = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g1sps"]
+seamless = true
+noise = SubResource("FastNoiseLite_odh8s")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rremj"]
+render_priority = 0
+shader = ExtResource("1_vbyq6")
+shader_parameter/water_color = Color(0.232916, 0.745993, 0.981746, 1)
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_odh8s")
+shader_parameter/noise_texture2 = SubResource("NoiseTexture2D_g1sps")
+shader_parameter/wave_speed = 0.05
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dcr6b"]
+material = SubResource("ShaderMaterial_rremj")
+size = Vector2(200, 100)
+subdivide_width = 40
+subdivide_depth = 40
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lwx4d"]
+size = Vector3(7, 8, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qcs6y"]
+noise_type = 3
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fjhp4"]
+seamless = true
+noise = SubResource("FastNoiseLite_qcs6y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fjhp4"]
+render_priority = 0
+shader = ExtResource("2_qcs6y")
+shader_parameter/dissolve_height = 12.0
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_fjhp4")
+shader_parameter/noise_size = 0.0
+shader_parameter/noise_scale = 0.0
+shader_parameter/noise_speed = 0.1
+shader_parameter/base_color = Color(0.656553, 0.637609, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_dqiw5"]
+radius = 8.22
+height = 17.0
+
+[node name="OceanStage" type="Node3D"]
+script = ExtResource("1_qcs6y")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.864757, -0.269042, 0.424041, 0, 0.844384, 0.535738, -0.50219, -0.463284, 0.730187, 0, 6.1123, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3ihc8")
+
+[node name="Floor" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2519, 0)
+material_override = SubResource("StandardMaterial3D_ael4v")
+use_collision = true
+radius = 8.0
+height = 4.0
+
+[node name="RandomBackgroundStandins" type="Node" parent="."]
+
+[node name="RandomBuilding1" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(0.941483, 0.189843, 0.278513, -0.27127, 0.917204, 0.291804, -0.200057, -0.350281, 0.91503, -22, 0, -30)
+material_override = SubResource("StandardMaterial3D_gunap")
+size = Vector3(5, 15, 5)
+
+[node name="RandomBuilding2" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(0.810985, -0.0893958, 0.578197, -0.0793024, 0.962341, 0.260019, -0.579667, -0.256724, 0.773355, 14.8029, 0, -13.3521)
+material_override = SubResource("StandardMaterial3D_3ihc8")
+size = Vector3(5, 15, 5)
+
+[node name="BackgroundStandinLeft" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(0.79451, 0, -0.607251, 0, 1, 0, 0.607251, 0, 0.79451, -28.1198, 6.4437, -35.5786)
+material_override = SubResource("StandardMaterial3D_odh8s")
+size = Vector3(1, 25, 75)
+
+[node name="BackgroundStandinRight" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(-0.783032, 0, -0.621982, 0, 1, 0, 0.621982, 0, -0.783032, 40.0641, 6.4437, -35.5786)
+material_override = SubResource("StandardMaterial3D_rremj")
+size = Vector3(1, 25, 75)
+
+[node name="BackgroundStandinCenter" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(-0.071393, 0, -0.997448, 0, 1, 0, 0.997448, 0, -0.071393, 8.89461, 6.4437, -46.8573)
+material_override = SubResource("StandardMaterial3D_g1sps")
+size = Vector3(1, 25, 75)
+
+[node name="Water" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_dcr6b")
+skeleton = NodePath("../..")
+
+[node name="InvisibleWalls" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+collision_layer = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InvisibleWalls"]
+transform = Transform3D(0.922572, 0, 0.385826, 0, 1, 0, -0.385826, 0, 0.922572, 2.85703, 0, 7.3932)
+shape = SubResource("BoxShape3D_lwx4d")
+debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="InvisibleWalls"]
+transform = Transform3D(0.896718, 0, -0.442602, 0, 1, 0, 0.442602, 0, 0.896718, -2.76227, 0, 7.64319)
+shape = SubResource("BoxShape3D_lwx4d")
+debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="InvisibleWalls"]
+transform = Transform3D(-0.917859, 0, -0.396908, 0, 1, 0, 0.396908, 0, -0.917859, -2.76056, 0, -7.37527)
+shape = SubResource("BoxShape3D_lwx4d")
+debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="InvisibleWalls"]
+transform = Transform3D(-0.901983, 0, 0.431771, 0, 1, 0, -0.431771, 0, -0.901983, 2.85532, 0, -7.69292)
+shape = SubResource("BoxShape3D_lwx4d")
+debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="InvisibleWalls"]
+transform = Transform3D(0.386888, 0, -0.922127, 0, 1, 0, 0.922127, 0, 0.386888, -7.34665, 0, 2.98351)
+shape = SubResource("BoxShape3D_lwx4d")
+debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="InvisibleWalls"]
+transform = Transform3D(-0.441568, 0, -0.897227, 0, 1, 0, 0.897227, 0, -0.441568, -7.60312, 0, -2.6355)
+shape = SubResource("BoxShape3D_lwx4d")
+debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="InvisibleWalls"]
+transform = Transform3D(-0.383054, 0, 0.923726, 0, 1, 0, -0.923726, 0, -0.383054, 7.42685, 0, -2.80354)
+shape = SubResource("BoxShape3D_lwx4d")
+debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
+
+[node name="CollisionShape3D8" type="CollisionShape3D" parent="InvisibleWalls"]
+transform = Transform3D(0.445292, 0, 0.895386, 0, 1, 0, -0.895386, 0, 0.445292, 7.65998, 0, 2.81648)
+shape = SubResource("BoxShape3D_lwx4d")
+debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
+
+[node name="ForceField" type="MeshInstance3D" parent="InvisibleWalls"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13367, 0)
+material_override = SubResource("ShaderMaterial_fjhp4")
+mesh = SubResource("SphereMesh_dqiw5")

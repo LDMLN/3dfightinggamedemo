@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://dqb1tdcels715"]
+
+[ext_resource type="Script" uid="uid://c5vpj2aciy8b4" path="res://Scenes/Battle/Camera/BattleCamera.cs" id="1_rtvqy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rtvqy"]
+albedo_color = Color(0, 0.544373, 0.939832, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_n0b67"]
+material = SubResource("StandardMaterial3D_rtvqy")
+radius = 0.25
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n0b67"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_esrbj"]
+material = SubResource("StandardMaterial3D_n0b67")
+
+[node name="BattleCamera" type="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0.953407, 0.301688, 0, -0.301688, 0.953407, 0, 0, 0)
+script = ExtResource("1_rtvqy")
+
+[node name="DebugSphere1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.953407, 0.301688, 0, -0.301688, 0.953407, 0, 0, 0)
+top_level = true
+mesh = SubResource("SphereMesh_n0b67")
+
+[node name="DebugSphere2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.953407, 0.301688, 0, -0.301688, 0.953407, 0, 0, 0)
+top_level = true
+mesh = SubResource("SphereMesh_esrbj")

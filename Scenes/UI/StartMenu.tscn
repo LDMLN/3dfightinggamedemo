@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://bu450rk54y3ll"]
 
-[ext_resource type="Shader" uid="uid://bcid4rv3uq84q" path="res://Scenes/Shaders/BattleShaders/Water.gdshader" id="1_7sc2f"]
-[ext_resource type="PackedScene" uid="uid://c3mjm61irkmkq" path="res://Scenes/UI/main_menu.tscn" id="2_7sc2f"]
+[ext_resource type="Shader" uid="uid://bcid4rv3uq84q" path="res://Scenes/Shaders/StageShaders/Water.gdshader" id="1_7sc2f"]
+[ext_resource type="PackedScene" uid="uid://bprcvbu015hc4" path="res://Scenes/UI/main_menu.tscn" id="2_7sc2f"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_omsb3"]
 sky_top_color = Color(0.192209, 0.61834, 0.896268, 1)
@@ -79,7 +79,7 @@ shadow_enabled = true
 environment = SubResource("Environment_k44vq")
 
 [node name="Camera3D" type="Camera3D" parent="StartMenuBackground/Stage"]
-transform = Transform3D(0.931011, 0.113079, -0.347032, 0, 0.950797, 0.309814, 0.364991, -0.28844, 0.885203, -5.20625, 8.61999, 12.7879)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.895385, 13.1098, -0.0470295)
 
 [node name="Floor" type="CSGCylinder3D" parent="StartMenuBackground/Stage"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2519, 0)
