@@ -70,6 +70,7 @@ subdivide_depth = 40
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_tmq01"]
 
 [node name="Battle" type="Node3D"]
+process_mode = 1
 script = ExtResource("1_ael4v")
 
 [node name="Stage(should be own scene)" type="Node3D" parent="."]
