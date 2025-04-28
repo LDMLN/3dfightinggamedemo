@@ -18,9 +18,17 @@ public partial class Character : CharacterBody3D
     Vector3 velocity = Vector3.Zero;
     Vector3 targetPosition = Vector3.Zero;
 
-    StandardMaterial3D baseColorMat = new StandardMaterial3D();
-    StandardMaterial3D attackRedMat = new StandardMaterial3D() {AlbedoColor = new Color(1.0f, 0.0f, 0.0f)};
-    private MeshInstance3D characterMesh = new();
+    // Reference to the Imported Model's Armature and Skeleton3D
+    private Node3D armature;
+    private Skeleton3D skeleton;
+
+    // Animation player and tree for controlling animations
+    private AnimationPlayer animPlayer;
+    private AnimationTree animTree;
+
+    // StandardMaterial3D baseColorMat = new StandardMaterial3D();
+    // StandardMaterial3D attackRedMat = new StandardMaterial3D() { AlbedoColor = new Color(1.0f, 0.0f, 0.0f) };
+    // private MeshInstance3D characterMesh = new();
 
     //didn't end up needing
     //string[] movementInputs = {"Walk_Right", "Walk_Left", "Walk_Up", "Walk_Down"};
@@ -30,8 +38,14 @@ public partial class Character : CharacterBody3D
 
     public override void _Ready()
     {
-        characterMesh = GetNode<MeshInstance3D>("MeshInstance3D");
-        baseColorMat = (StandardMaterial3D)characterMesh.GetSurfaceOverrideMaterial(0);
+        // characterMesh = GetNode<MeshInstance3D>("MeshInstance3D");
+        // baseColorMat = (StandardMaterial3D)characterMesh.GetSurfaceOverrideMaterial(0);
+
+        // Get references to the new structure components
+        armature = GetNode<Node3D>("Armature");
+        skeleton = GetNode<Skeleton3D>("Armature/Skeleton3D");
+        animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+        animTree = GetNode<AnimationTree>("AnimationTree");
     }
 
     /*
@@ -48,6 +62,16 @@ public partial class Character : CharacterBody3D
         {
             return;
         }
+
+        // Check if we're not moving and set idle animation
+        if (velocity.LengthSquared() < 0.01f)
+        {
+            if (animTree != null && animTree.Active)
+            {
+                animTree.Set("parameters/Locomotion/blend_position", Vector2.Zero);
+            }
+        }
+
         //radius of the circle we'll be moving in
         //float distanceToEnemy = this.GlobalPosition.DistanceTo(enemyCharacter.GlobalPosition);
         angleToEnemy += (float)(movementSpeed * delta);
@@ -75,6 +99,15 @@ public partial class Character : CharacterBody3D
         string[] newInputs = TranslateInput();
         HandleNewInput(newInputs[0], newInputs[1]);
 
+        // After handling input, if we're in "neutral" (5), set to idle
+        if (newInputs[0] == "5" && newInputs[1] == "")
+        {
+            if (animTree != null && animTree.Active)
+            {
+                animTree.Set("parameters/Locomotion/blend_position", Vector2.Zero);
+            }
+        }
+
         GD.Print(newInputs);
     }
 
@@ -90,7 +123,7 @@ public partial class Character : CharacterBody3D
         {
             HandleCardinalMovement(movementInput);
         }
-        else 
+        else
         {
             HandleNonCardinalMovement(movementInput);
         }
@@ -121,10 +154,10 @@ public partial class Character : CharacterBody3D
                 GD.Print("Heavy Kick!");
             }
         }
-        
-        characterMesh.SetSurfaceOverrideMaterial(0, attackRedMat);
-        await ToSignal(GetTree().CreateTimer(.15), "timeout");
-        characterMesh.SetSurfaceOverrideMaterial(0, baseColorMat);
+
+        // characterMesh.SetSurfaceOverrideMaterial(0, attackRedMat);
+        // await ToSignal(GetTree().CreateTimer(.15), "timeout");
+        // characterMesh.SetSurfaceOverrideMaterial(0, baseColorMat);
     }
 
 
@@ -132,6 +165,8 @@ public partial class Character : CharacterBody3D
     {
         float horizontalSpeed = 0;
         float strafeSpeed = 0;
+        Vector2 blendPosition = Vector2.Zero;
+
         //this is cleaner, imo, but might be a problem when trying to handle things like (if "8" is held, we jump) later so I'm not using it... might use later though.
         //strafeSpeed = movementInput == "8" ? 1 : movementInput == "2" ? -1 : 0;
         //horizontalSpeed = movementInput == "6" ? 1 : movementInput == "4" ? -1 : 0;
@@ -140,32 +175,43 @@ public partial class Character : CharacterBody3D
         if (movementInput == "8")
         {
             strafeSpeed = 1;
+            blendPosition = new Vector2(-1, 0); // Left in BlendSpace
         }
         //if held, crouch
         else if (movementInput == "2")
         {
             strafeSpeed = -1;
+            blendPosition = new Vector2(1, 0); // Right in BlendSpace
         }
         else if (movementInput == "6")
         {
             horizontalSpeed = 1;
+            blendPosition = new Vector2(0, 1); // Forward in BlendSpace
         }
         else if (movementInput == "4")
         {
             horizontalSpeed = -1;
+            blendPosition = new Vector2(0, -1); // Backward in BlendSpace
         }
         else
         {
             GD.Print("STOP MOVING!!!!");
             horizontalSpeed = 0;
             strafeSpeed = 0;
+            blendPosition = Vector2.Zero; // Idle position in BlendSpace
+        }
+
+        // Apply the blend position to the animation tree
+        if (animTree != null && animTree.Active)
+        {
+            animTree.Set("parameters/Locomotion/blend_position", blendPosition);
         }
 
         //we will only be moving either forward/backward or "up"/"down"
         horizontalSpeed = strafeSpeed == 0 ? horizontalSpeed : 0;
         strafeSpeed = horizontalSpeed == 0 ? strafeSpeed : 0;
 
-        
+
         LookAt(enemyCharacter.GlobalPosition, Vector3.Up);
 
         Vector3 directionToEnemy = GlobalPosition.DirectionTo(enemyCharacter.GlobalPosition);
@@ -179,7 +225,7 @@ public partial class Character : CharacterBody3D
         //2.) the curve gets wider if looped many times around the enemy character
         if (strafeSpeed != 0)
         {
-            Vector3 strafeTarget = directionToEnemy.Rotated(Vector3.Up, (float)(Math.PI/2));
+            Vector3 strafeTarget = directionToEnemy.Rotated(Vector3.Up, (float)(Math.PI / 2));
             velocity = strafeTarget.Normalized() * movementSpeed * strafeSpeed;
             velocity.Y = 0;
         }
@@ -216,10 +262,10 @@ public partial class Character : CharacterBody3D
 
     private static string[] TranslateInput()
     {
-       string movementInput = GetMovementInput();
-       string attackInput = GetAttackInput();
+        string movementInput = GetMovementInput();
+        string attackInput = GetAttackInput();
         //we are building the movement string.
-       return [movementInput, attackInput];
+        return [movementInput, attackInput];
     }
 
 
@@ -267,8 +313,8 @@ public partial class Character : CharacterBody3D
         {
             movementInput = "4";
         }
-        
-        movementInput = movementInput == ""? "5" : movementInput;
+
+        movementInput = movementInput == "" ? "5" : movementInput;
 
         return movementInput;
     }
