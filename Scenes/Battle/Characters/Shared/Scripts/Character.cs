@@ -34,6 +34,9 @@ public partial class Character : CharacterBody3D
     //string[] movementInputs = {"Walk_Right", "Walk_Left", "Walk_Up", "Walk_Down"};
     //string[] attackInputs = {"Punch", "Heavy_Punch", "Kick", "Heavy_Kick"};
 
+    //this is the center of the player model, used for camera since model transform is currently set at the feet.
+    private Node3D characterCenter;
+
     string cardinals = "2468";
 
     public override void _Ready()
@@ -46,6 +49,7 @@ public partial class Character : CharacterBody3D
         skeleton = GetNode<Skeleton3D>("Armature/Skeleton3D");
         animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
         animTree = GetNode<AnimationTree>("AnimationTree");
+        characterCenter = GetNode<Node3D>("%CharacterCenter");
     }
 
     /*
@@ -57,6 +61,7 @@ public partial class Character : CharacterBody3D
 
     public override void _PhysicsProcess(double delta)
     {
+        LookAt(enemyCharacter.GlobalPosition, Vector3.Up);
         //not handling player2 at this moment but I want it to have this script
         if (whichPlayer == 2)
         {
@@ -211,9 +216,6 @@ public partial class Character : CharacterBody3D
         horizontalSpeed = strafeSpeed == 0 ? horizontalSpeed : 0;
         strafeSpeed = horizontalSpeed == 0 ? strafeSpeed : 0;
 
-
-        LookAt(enemyCharacter.GlobalPosition, Vector3.Up);
-
         Vector3 directionToEnemy = GlobalPosition.DirectionTo(enemyCharacter.GlobalPosition);
 
         if (horizontalSpeed != 0)
@@ -351,6 +353,11 @@ public partial class Character : CharacterBody3D
     public void SetEnemyCharacter(Character enemy)
     {
         enemyCharacter = enemy;
+    }
+
+    public Node3D GetCharacterCenter()
+    {
+        return characterCenter;
     }
 
 }

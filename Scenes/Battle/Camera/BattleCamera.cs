@@ -18,8 +18,11 @@ public partial class BattleCamera : Camera3D
     
 
 
-    Character targetPlayer1;
-    Character targetPlayer2;
+    //changed this since we are just looking at the center now.
+    //Character targetPlayer1;
+    //Character targetPlayer2;
+    Node3D targetPlayer1Center;
+    Node3D targetPlayer2Center;
 
     Vector3 lookPosition;
     Vector3 placementPosition;
@@ -44,20 +47,20 @@ public partial class BattleCamera : Camera3D
     {
         //TODO: don't like having this check every frame... let's rewrite this so we know it also has two targets.
         //but wait... actually maybe we do want this to be here because if a character is ringed out then we don't want it to follow them down...
-        if (targetPlayer1 is null || targetPlayer2 is null)
+        if (targetPlayer1Center is null || targetPlayer2Center is null)
         {
             GD.Print("returning cuz targets are null: Camera");
             return;
         }
 
         //could do with some cleaning up
-        lookPosition = (targetPlayer1.GlobalPosition + targetPlayer2.GlobalPosition) /2;
-        Vector3 directionBetweenPlayers = targetPlayer1.GlobalPosition.DirectionTo(targetPlayer2.GlobalPosition);
+        lookPosition = (targetPlayer1Center.GlobalPosition + targetPlayer2Center.GlobalPosition) /2;
+        Vector3 directionBetweenPlayers = targetPlayer1Center.GlobalPosition.DirectionTo(targetPlayer2Center.GlobalPosition);
         //technically, since directionBetweenPlayers is normalized from DirectionTo and Vector3.Up is a unit vector,
         //the cross vector should also (probably) already be normalized... but just to be safe.
         Vector3 cameraToLookDirection = directionBetweenPlayers.Cross(Vector3.Up).Normalized();
 
-        float zoomDistance = targetPlayer1.GlobalPosition.DistanceTo(targetPlayer2.GlobalPosition) / 2;
+        float zoomDistance = targetPlayer1Center.GlobalPosition.DistanceTo(targetPlayer2Center.GlobalPosition) / 2;
         zoomDistance = Math.Clamp(zoomDistance, cameraMinZoom, cameraMaxZoom);
         cameraElevation = zoomDistance / 2;
         Vector3 cameraOffsetVector = cameraToLookDirection * zoomDistance;
@@ -76,7 +79,7 @@ public partial class BattleCamera : Camera3D
     //might have the camera just do this itself if we put both the players in a group...
     public void SetPlayers(Character player1, Character player2)
     {
-        targetPlayer1 = player1;
-        targetPlayer2 = player2;
+        targetPlayer1Center = player1.GetCharacterCenter();
+        targetPlayer2Center = player2.GetCharacterCenter();
     }
 }
