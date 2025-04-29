@@ -1,16 +1,13 @@
 using Godot;
 using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 //author: Luiz Leao
 [GlobalClass]
 public partial class Character : CharacterBody3D
 {
     //this has to be passed into it from the the Battle scene
-    private Camera3D battleCamera;
     [Export] public Character enemyCharacter;
+    //this is unneccessary later... right now just only works if the int is "1" 
     [Export(PropertyHint.Range, "1,2")] public int whichPlayer;
 
     float angleToEnemy = 0.0f;
@@ -106,6 +103,8 @@ public partial class Character : CharacterBody3D
         {
             if (attackInput == "P")
             {
+                //punch animation
+                //do hitbox/hurtbox for punch attack logic
                 GD.Print("Punch!");
             }
             else if (attackInput == "HP")
@@ -122,6 +121,7 @@ public partial class Character : CharacterBody3D
             }
         }
         
+        //any attack reaction... get rid of later.
         characterMesh.SetSurfaceOverrideMaterial(0, attackRedMat);
         await ToSignal(GetTree().CreateTimer(.15), "timeout");
         characterMesh.SetSurfaceOverrideMaterial(0, baseColorMat);
@@ -268,7 +268,7 @@ public partial class Character : CharacterBody3D
             movementInput = "4";
         }
         
-        movementInput = movementInput == ""? "5" : movementInput;
+        movementInput = movementInput == "" ? "5" : movementInput;
 
         return movementInput;
     }
@@ -296,15 +296,14 @@ public partial class Character : CharacterBody3D
         return attackInput;
     }
 
-
-    public void SetCamera(Camera3D stageCamera)
-    {
-        battleCamera = stageCamera;
-    }
-
     public void SetEnemyCharacter(Character enemy)
     {
         enemyCharacter = enemy;
+    }
+
+    private void Died()
+    {
+        //implement a signal here for Battle to interact with.
     }
 
 }
