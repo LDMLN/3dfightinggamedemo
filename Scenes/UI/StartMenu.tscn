@@ -79,7 +79,7 @@ shadow_enabled = true
 environment = SubResource("Environment_k44vq")
 
 [node name="Camera3D" type="Camera3D" parent="StartMenuBackground/Stage"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.895385, 13.1098, -0.0470295)
+transform = Transform3D(0.929789, 0.158073, -0.332422, 0, 0.903096, 0.42944, 0.368092, -0.399288, 0.839689, -3.45315, 8.55197, 8.11401)
 
 [node name="Floor" type="CSGCylinder3D" parent="StartMenuBackground/Stage"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2519, 0)

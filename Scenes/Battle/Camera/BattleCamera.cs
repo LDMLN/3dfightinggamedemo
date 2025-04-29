@@ -15,8 +15,6 @@ public partial class BattleCamera : Camera3D
     [Export] public Vector2 margin = new Vector2(200, 100);
 
     Vector2 screenSize;
-    
-
 
     //changed this since we are just looking at the center now.
     //Character targetPlayer1;
@@ -27,8 +25,9 @@ public partial class BattleCamera : Camera3D
     Vector3 lookPosition;
     Vector3 placementPosition;
 
-    MeshInstance3D MidpointSphere;
-    MeshInstance3D PerpendendicularSphere;
+    //debug spheres
+    //MeshInstance3D MidpointSphere;
+    //MeshInstance3D PerpendendicularSphere;
 
     Node3D cameraPivot;
 
@@ -36,10 +35,12 @@ public partial class BattleCamera : Camera3D
 
     public override void _Ready()
     {
-        screenSize = GetViewport().GetVisibleRect().Size;
-        GD.Print("screenSize: " + screenSize);
-        MidpointSphere = GetNode<MeshInstance3D>("DebugSphere1");
-        PerpendendicularSphere = GetNode<MeshInstance3D>("DebugSphere2");
+        //no longer necessary, the screen is never cutoff due to stage size.
+        //screenSize = GetViewport().GetVisibleRect().Size;
+        //GD.Print("screenSize: " + screenSize);
+        //debug spheres setup
+        //MidpointSphere = GetNode<MeshInstance3D>("DebugSphere1");
+        //PerpendendicularSphere = GetNode<MeshInstance3D>("DebugSphere2");
     }
 
 
@@ -49,6 +50,7 @@ public partial class BattleCamera : Camera3D
         //but wait... actually maybe we do want this to be here because if a character is ringed out then we don't want it to follow them down...
         if (targetPlayer1Center is null || targetPlayer2Center is null)
         {
+            //maybe shift to only follow remaining player
             GD.Print("returning cuz targets are null: Camera");
             return;
         }

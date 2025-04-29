@@ -15,7 +15,7 @@ public partial class Battle : Node3D
         player2 = GetNode<Character>("Character2");
         battleStage = GetNode<Stage>("OceanStage");
 
-
+        //delete this eventually
         player1.whichPlayer = 1;
         player2.whichPlayer = 2;
 
