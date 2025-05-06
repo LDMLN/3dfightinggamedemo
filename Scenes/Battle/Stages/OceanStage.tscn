@@ -35,20 +35,25 @@ albedo_color = Color(0.694118, 0.501961, 0.133333, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_3ihc8"]
 noise_type = 2
-fractal_type = 0
+frequency = 0.015
+fractal_gain = 0.0
 cellular_distance_function = 1
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_odh8s"]
+width = 256
+height = 128
 seamless = true
 noise = SubResource("FastNoiseLite_3ihc8")
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_odh8s"]
 noise_type = 2
 seed = 4
-fractal_type = 0
+fractal_gain = 0.0
 cellular_distance_function = 1
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_g1sps"]
+width = 256
+height = 64
 seamless = true
 noise = SubResource("FastNoiseLite_odh8s")
 
@@ -58,11 +63,11 @@ shader = ExtResource("1_vbyq6")
 shader_parameter/water_color = Color(0.232916, 0.745993, 0.981746, 1)
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_odh8s")
 shader_parameter/noise_texture2 = SubResource("NoiseTexture2D_g1sps")
-shader_parameter/wave_speed = 0.05
+shader_parameter/wave_speed = 0.08
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_dcr6b"]
 material = SubResource("ShaderMaterial_rremj")
-size = Vector2(200, 100)
+size = Vector2(200, 130)
 subdivide_width = 40
 subdivide_depth = 40
 
@@ -80,12 +85,10 @@ noise = SubResource("FastNoiseLite_qcs6y")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fjhp4"]
 render_priority = 0
 shader = ExtResource("2_qcs6y")
-shader_parameter/dissolve_height = 12.0
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_fjhp4")
-shader_parameter/noise_size = 0.0
-shader_parameter/noise_scale = 0.0
-shader_parameter/noise_speed = 0.1
-shader_parameter/base_color = Color(0.656553, 0.637609, 1, 1)
+shader_parameter/noise_speed = 0.05
+shader_parameter/dissolve_cutoff = 0.0
+shader_parameter/base_color = Color(0.419608, 0, 1, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_dqiw5"]
 radius = 8.22
@@ -115,6 +118,11 @@ transform = Transform3D(0.941483, 0.189843, 0.278513, -0.27127, 0.917204, 0.2918
 material_override = SubResource("StandardMaterial3D_gunap")
 size = Vector3(5, 15, 5)
 
+[node name="RandomBuilding3" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(3.40929, -0.0547682, 0.190941, 0.258601, 0.357201, 0.444342, -0.698124, -0.135145, 1.09706, 21.3186, -0.764153, 16.0463)
+material_override = SubResource("StandardMaterial3D_gunap")
+size = Vector3(5, 15, 5)
+
 [node name="RandomBuilding2" type="CSGBox3D" parent="RandomBackgroundStandins"]
 transform = Transform3D(0.810985, -0.0893958, 0.578197, -0.0793024, 0.962341, 0.260019, -0.579667, -0.256724, 0.773355, 14.8029, 0, -13.3521)
 material_override = SubResource("StandardMaterial3D_3ihc8")
@@ -135,56 +143,82 @@ transform = Transform3D(-0.071393, 0, -0.997448, 0, 1, 0, 0.997448, 0, -0.071393
 material_override = SubResource("StandardMaterial3D_g1sps")
 size = Vector3(1, 25, 75)
 
+[node name="BackgroundStandinLeft2" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(-0.852166, 0, 0.523272, 0, 1, 0, -0.523272, 0, -0.852166, 41.448, 0.446933, 55.0923)
+material_override = SubResource("StandardMaterial3D_odh8s")
+size = Vector3(1, 25, 75)
+
+[node name="BackgroundStandinRight2" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(0.715693, 0, 0.698416, 0, 1, 0, -0.698416, 0, 0.715693, -26.3821, 0.446933, 62.0288)
+material_override = SubResource("StandardMaterial3D_rremj")
+size = Vector3(1, 25, 75)
+
+[node name="BackgroundStandinCenter2" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(-0.0304513, 0, 0.999536, 0, 1, 0, -0.999536, 0, -0.0304513, 5.77305, 0.446933, 70.078)
+material_override = SubResource("StandardMaterial3D_g1sps")
+size = Vector3(1, 25, 75)
+
+[node name="BackgroundStandinLeft3" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(-0.964875, 0.0993005, 0.24322, 0.139204, 0.978408, 0.152774, -0.222798, 0.181265, -0.957864, 56.1401, 0.903919, 10.6044)
+material_override = SubResource("StandardMaterial3D_odh8s")
+size = Vector3(1, 25, 75)
+
+[node name="BackgroundStandinLeft4" type="CSGBox3D" parent="RandomBackgroundStandins"]
+transform = Transform3D(0.989484, -0.13131, -0.0606482, 0.125558, 0.987949, -0.0905163, 0.0718029, 0.0819497, 0.994046, -48.3442, 0.903919, 10.6044)
+material_override = SubResource("StandardMaterial3D_odh8s")
+size = Vector3(1, 25, 75)
+
 [node name="Water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.72205e-06, -2.86102e-06, 10.9831)
 mesh = SubResource("PlaneMesh_dcr6b")
 skeleton = NodePath("../..")
 
-[node name="InvisibleWalls" type="StaticBody3D" parent="."]
+[node name="StageBoundary" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 collision_layer = 4
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="InvisibleWalls"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StageBoundary"]
 transform = Transform3D(0.922572, 0, 0.385826, 0, 1, 0, -0.385826, 0, 0.922572, 2.85703, 0, 7.3932)
 shape = SubResource("BoxShape3D_lwx4d")
 debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="InvisibleWalls"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StageBoundary"]
 transform = Transform3D(0.896718, 0, -0.442602, 0, 1, 0, 0.442602, 0, 0.896718, -2.76227, 0, 7.64319)
 shape = SubResource("BoxShape3D_lwx4d")
 debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
 
-[node name="CollisionShape3D3" type="CollisionShape3D" parent="InvisibleWalls"]
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="StageBoundary"]
 transform = Transform3D(-0.917859, 0, -0.396908, 0, 1, 0, 0.396908, 0, -0.917859, -2.76056, 0, -7.37527)
 shape = SubResource("BoxShape3D_lwx4d")
 debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
 
-[node name="CollisionShape3D4" type="CollisionShape3D" parent="InvisibleWalls"]
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="StageBoundary"]
 transform = Transform3D(-0.901983, 0, 0.431771, 0, 1, 0, -0.431771, 0, -0.901983, 2.85532, 0, -7.69292)
 shape = SubResource("BoxShape3D_lwx4d")
 debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
 
-[node name="CollisionShape3D5" type="CollisionShape3D" parent="InvisibleWalls"]
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="StageBoundary"]
 transform = Transform3D(0.386888, 0, -0.922127, 0, 1, 0, 0.922127, 0, 0.386888, -7.34665, 0, 2.98351)
 shape = SubResource("BoxShape3D_lwx4d")
 debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
 
-[node name="CollisionShape3D6" type="CollisionShape3D" parent="InvisibleWalls"]
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="StageBoundary"]
 transform = Transform3D(-0.441568, 0, -0.897227, 0, 1, 0, 0.897227, 0, -0.441568, -7.60312, 0, -2.6355)
 shape = SubResource("BoxShape3D_lwx4d")
 debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
 
-[node name="CollisionShape3D7" type="CollisionShape3D" parent="InvisibleWalls"]
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="StageBoundary"]
 transform = Transform3D(-0.383054, 0, 0.923726, 0, 1, 0, -0.923726, 0, -0.383054, 7.42685, 0, -2.80354)
 shape = SubResource("BoxShape3D_lwx4d")
 debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
 
-[node name="CollisionShape3D8" type="CollisionShape3D" parent="InvisibleWalls"]
+[node name="CollisionShape3D8" type="CollisionShape3D" parent="StageBoundary"]
 transform = Transform3D(0.445292, 0, 0.895386, 0, 1, 0, -0.895386, 0, 0.445292, 7.65998, 0, 2.81648)
 shape = SubResource("BoxShape3D_lwx4d")
 debug_color = Color(0.923217, 5.11149e-05, 0.686513, 1)
 
-[node name="ForceField" type="MeshInstance3D" parent="InvisibleWalls"]
+[node name="ForceField" type="MeshInstance3D" parent="StageBoundary"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.13367, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.288399, -1.59189, 0.157654)
 material_override = SubResource("ShaderMaterial_fjhp4")
 mesh = SubResource("SphereMesh_dqiw5")

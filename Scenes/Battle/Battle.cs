@@ -17,7 +17,13 @@ public partial class Battle : Node3D
 
         //delete this eventually
         player1.whichPlayer = 1;
+        //player1.SetBattleCamera(battleCamera);
+        player1.InitializeStateMachine(player2, battleCamera);
         player2.whichPlayer = 2;
+        //player2.SetBattleCamera(battleCamera);
+        
+        //uncomment to turn on player2 movement
+        //player2.InitializeStateMachine(player1, battleCamera);
 
         battleCamera.SetPlayers(player1, player2);
         battleStage.BattleStart();

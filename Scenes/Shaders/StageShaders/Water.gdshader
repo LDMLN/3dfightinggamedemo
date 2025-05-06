@@ -16,7 +16,7 @@ void vertex() {
 	noise_color = texture(noise_texture, UV + TIME * wave_speed);
 	noise_color_reverse = texture(noise_texture2, UV - TIME * wave_speed);
 	combined_noise = pow(noise_color * noise_color_reverse, vec4(1.25f));
-	VERTEX = combined_noise.rgb * NORMAL * 5.0f + VERTEX;
+	VERTEX = combined_noise.rgb * NORMAL * 4.0f + VERTEX;
 	// Called for every vertex the material is visible on.
 
 }

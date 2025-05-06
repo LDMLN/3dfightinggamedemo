@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://y2s1dlo1vgns"]
+
+[ext_resource type="Script" uid="uid://whvaxu4v65v6" path="res://Scenes/Battle/Characters/Shared/InputHandler/InputHandler.cs" id="1_dtle6"]
+
+[node name="InputHandler" type="Node"]
+script = ExtResource("1_dtle6")
