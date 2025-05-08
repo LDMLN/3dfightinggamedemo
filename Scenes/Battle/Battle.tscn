@@ -79,6 +79,7 @@ script = ExtResource("1_ael4v")
 transform = Transform3D(0.864757, -0.269042, 0.424041, 0, 0.844384, 0.535738, -0.50219, -0.463284, 0.730187, 0, 6.1123, 0)
 shadow_enabled = true
 
+<<<<<<< Updated upstream
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Stage(should be own scene)"]
 environment = SubResource("Environment_3ihc8")
 
@@ -91,6 +92,44 @@ material_override = SubResource("StandardMaterial3D_ael4v")
 use_collision = true
 radius = 8.0
 height = 4.0
+=======
+[node name="Character" parent="." node_paths=PackedStringArray("enemyCharacter") instance=ExtResource("3_3ihc8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.16612, 3.2, 0)
+collision_mask = 5
+enemyCharacter = NodePath("../Character2")
+whichPlayer = 1
+
+[node name="Character2" parent="." node_paths=PackedStringArray("enemyCharacter") instance=ExtResource("3_3ihc8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7322, 3.21076, -0.00133562)
+collision_mask = 5
+enemyCharacter = NodePath("../Character")
+whichPlayer = 2
+
+[node name="Skeleton3D" parent="Character2/Armature" index="0"]
+bones/0/position = Vector3(2.92624, 7.50359, -93.0806)
+bones/0/rotation = Quaternion(-0.614235, -0.471032, 0.40962, 0.482759)
+bones/1/rotation = Quaternion(0.0216571, 0.0362763, -0.0104321, 0.999053)
+bones/2/rotation = Quaternion(0.0805305, 0.0606856, 0.0183431, 0.994734)
+bones/3/rotation = Quaternion(0.0506155, 0.0600195, 0.0186917, 0.996738)
+bones/4/rotation = Quaternion(0.0672824, 0.0563354, -0.0616901, 0.99423)
+bones/5/rotation = Quaternion(-0.0399169, 0.303922, -0.0643122, 0.949685)
+bones/9/rotation = Quaternion(-0.667438, -0.308393, 0.605386, -0.304841)
+bones/10/rotation = Quaternion(0.0182005, -0.261545, 0.0234851, 0.964734)
+bones/11/rotation = Quaternion(2.26929e-05, -2.18991e-05, 0.719921, 0.694057)
+bones/12/rotation = Quaternion(0.0365077, -0.238619, -0.0592762, 0.968615)
+bones/21/rotation = Quaternion(0.653793, -0.318823, 0.616957, 0.300451)
+bones/22/rotation = Quaternion(0.102778, 0.0888061, -0.584474, 0.799963)
+bones/23/rotation = Quaternion(2.47479e-05, 1.83904e-05, -0.809299, 0.587397)
+bones/24/rotation = Quaternion(-0.0734966, 0.226474, -0.0155237, 0.971116)
+bones/33/rotation = Quaternion(0.140411, 0.057142, 0.979425, -0.133218)
+bones/34/rotation = Quaternion(-0.381366, 0.085999, -0.0290824, 0.919955)
+bones/35/rotation = Quaternion(0.561191, 0.109233, -0.0482466, 0.819027)
+bones/36/rotation = Quaternion(0.417278, 0.0828279, 0.0413187, 0.904053)
+bones/38/rotation = Quaternion(-0.0978302, 0.0970781, 0.978487, 0.15352)
+bones/39/rotation = Quaternion(-0.496535, 0.0724089, -0.0383405, 0.864141)
+bones/40/rotation = Quaternion(0.547671, 0.0609623, -0.00108761, 0.834469)
+bones/41/rotation = Quaternion(0.428491, -0.0493552, -0.0189386, 0.901998)
+>>>>>>> Stashed changes
 
 [node name="RandomBackgroundStandins" type="Node" parent="Stage(should be own scene)"]
 
