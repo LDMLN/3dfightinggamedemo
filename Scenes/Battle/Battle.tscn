@@ -1,9 +1,20 @@
-[gd_scene load_steps=5 format=3 uid="uid://d0pty7blxma1u"]
+[gd_scene load_steps=7 format=3 uid="uid://d0pty7blxma1u"]
 
 [ext_resource type="Script" uid="uid://cwbj4huj6utgq" path="res://Scenes/Battle/Battle.cs" id="1_ael4v"]
 [ext_resource type="PackedScene" uid="uid://bkpslchvx6d17" path="res://Scenes/Battle/Stages/OceanStage.tscn" id="2_3ihc8"]
 [ext_resource type="PackedScene" uid="uid://dqb1tdcels715" path="res://Scenes/Battle/Camera/BattleCamera.tscn" id="2_odh8s"]
 [ext_resource type="PackedScene" uid="uid://dkee6s1qas0l" path="res://Scenes/Battle/Characters/Character.tscn" id="3_3ihc8"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_odh8s"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rremj"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_odh8s")
+billboard_mode = 2
+billboard_keep_scale = true
 
 [node name="Battle" type="Node3D"]
 script = ExtResource("1_ael4v")
@@ -50,5 +61,8 @@ bones/38/rotation = Quaternion(-0.0870135, 0.0856619, 0.975266, 0.184249)
 bones/39/rotation = Quaternion(-0.499194, 0.0659048, -0.0341394, 0.863306)
 bones/40/rotation = Quaternion(0.536946, 0.0470131, 0.0566917, 0.840396)
 bones/41/rotation = Quaternion(0.429909, -0.0492387, -0.0191734, 0.901325)
+
+[node name="MeshInstance3D" parent="Character2" index="5"]
+material_override = SubResource("StandardMaterial3D_rremj")
 
 [editable path="Character2"]
