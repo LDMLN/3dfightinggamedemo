@@ -34,19 +34,21 @@ public abstract partial class CharacterState : Node
     // Animation player and tree for controlling animations
     protected AnimationPlayer animPlayer;
     protected AnimationTree animTree;
+    protected AnimationNodeStateMachinePlayback animStateMachine;
+
     protected Label stateLabel;
 
     protected string cardinals = "2468";
 
     //use this to assign the actual state value itself
     //might just hard code this???
-    [Export]public State state;
+    [Export] public State state;
 
     //this method will be overriden by most states
     public abstract void Enter(string movementInput, string attackInput);
 
     //for the Idle state that can be entered with nothing pressed at all
-    public virtual void Enter(){}
+    public virtual void Enter() { }
 
     public abstract void Exit();
 
@@ -66,6 +68,22 @@ public abstract partial class CharacterState : Node
     {
         animPlayer = GetNode<AnimationPlayer>("%AnimationPlayer");
         animTree = GetNode<AnimationTree>("%AnimationTree");
+        // Activate Animation Tree
+        animTree.Active = true;
+
+        // Get state machine playback controller from Animation Tree:
+        try
+        {
+            animStateMachine = (AnimationNodeStateMachinePlayback)animTree.Get("parameters/playback");
+            if (animStateMachine == null)
+            {
+                GD.PrintErr("Failed to get AnimationNodeStateMachinePlayback!");
+            }
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Exception when getting StateMachine playback: {e.Message}");
+        }
     }
 
     public void SetDebugNodes()
@@ -87,5 +105,27 @@ public abstract partial class CharacterState : Node
         currentBattleCamera = battleCamera;
     }
 
+    /// <summary>
+    /// Plays a specified attack animation using the animation state machine.
+    /// </summary>
+    /// <param name="attackName">The name of the attack animation to play.</param>
+    protected void PlayAttackAnimation(string attackName)
+    {
+        // Verify that Animation Tree and state machine are available:
+        if (animTree == null || animStateMachine == null)
+        {
+            GD.PrintErr("Cannot play animation: animTree and/or animStateMachine is null!");
+            return;
+        }
 
+        // Transition to specified attack state using playback controller
+        try
+        {
+            animStateMachine.Travel(attackName);
+        }
+        catch (Exception e)
+        {
+            GD.PrintErr($"Failed to play animation {attackName}: {e.Message}");
+        }
+    }
 }

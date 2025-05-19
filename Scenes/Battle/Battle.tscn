@@ -95,4 +95,7 @@ bones/42/position = Vector3(2.42635e-06, 13.3829, 1.72367e-06)
 [node name="MeshInstance3D" parent="Character2" index="5"]
 material_override = SubResource("StandardMaterial3D_rremj")
 
+[node name="MeshInstance3D" parent="Character2" index="5"]
+material_override = SubResource("StandardMaterial3D_rremj")
+
 [editable path="Character2"]
