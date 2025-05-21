@@ -1,4 +1,5 @@
 [gd_scene load_steps=7 format=3 uid="uid://d0pty7blxma1u"]
+[gd_scene load_steps=7 format=3 uid="uid://d0pty7blxma1u"]
 
 [ext_resource type="Script" uid="uid://cwbj4huj6utgq" path="res://Scenes/Battle/Battle.cs" id="1_ael4v"]
 [ext_resource type="PackedScene" uid="uid://bkpslchvx6d17" path="res://Scenes/Battle/Stages/OceanStage.tscn" id="2_3ihc8"]
@@ -16,7 +17,19 @@ albedo_texture = SubResource("ViewportTexture_odh8s")
 billboard_mode = 2
 billboard_keep_scale = true
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_odh8s"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rremj"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+albedo_texture = SubResource("ViewportTexture_odh8s")
+billboard_mode = 2
+billboard_keep_scale = true
+
 [node name="Battle" type="Node3D"]
+process_mode = 1
 script = ExtResource("1_ael4v")
 
 [node name="BattleCamera" parent="." instance=ExtResource("2_odh8s")]
@@ -28,14 +41,14 @@ transform = Transform3D(1, 0, 0, 0, 0.953407, 0.301688, 0, -0.301688, 0.953407, 
 [node name="Character" parent="." node_paths=PackedStringArray("enemyCharacter") instance=ExtResource("3_3ihc8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.16612, 3.2, 0)
 collision_mask = 5
-enemyCharacter = NodePath("../Character2")
 whichPlayer = 1
+enemyCharacter = NodePath("../Character2")
 
 [node name="Character2" parent="." node_paths=PackedStringArray("enemyCharacter") instance=ExtResource("3_3ihc8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7322, 3.21076, -0.00133562)
 collision_mask = 5
-enemyCharacter = NodePath("../Character")
 whichPlayer = 2
+enemyCharacter = NodePath("../Character")
 
 [node name="Skeleton3D" parent="Character2/Armature" index="0"]
 bones/0/position = Vector3(1.9813, 4.53129, -98.451)

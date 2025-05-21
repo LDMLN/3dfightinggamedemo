@@ -1,9 +1,93 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpi0k5j3ox765"]
+[gd_scene load_steps=7 format=3 uid="uid://dpi0k5j3ox765"]
 
 [ext_resource type="PackedScene" uid="uid://bu450rk54y3ll" path="res://Scenes/UI/StartMenu.tscn" id="1_bbe6k"]
 [ext_resource type="Script" uid="uid://bnwvd0bna2q7c" path="res://Scenes/GameController/Game.cs" id="1_w23m7"]
+[ext_resource type="Script" uid="uid://sbu3sbhdmy15" path="res://Scenes/GameController/GameManager.cs" id="2_ppvgl"]
+[ext_resource type="Script" uid="uid://mkj6w33qw70a" path="res://Scenes/GameController/ToggleOnPause.cs" id="3_74ac7"]
+[ext_resource type="FontFile" uid="uid://cajb5nas2nr0u" path="res://GeneralUILooks&Themes/Exo-Bold.ttf" id="4_buolf"]
+[ext_resource type="FontFile" uid="uid://bs2jq24et147r" path="res://GeneralUILooks&Themes/Exo-Regular.ttf" id="5_ppvgl"]
 
 [node name="Game" type="Node3D"]
+process_mode = 3
 script = ExtResource("1_w23m7")
 
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("2_ppvgl")
+
 [node name="StartMenu" parent="." instance=ExtResource("1_bbe6k")]
+
+[node name="PauseMenu" type="CanvasLayer" parent="."]
+process_mode = 2
+visible = false
+script = ExtResource("3_74ac7")
+
+[node name="ColorRect" type="ColorRect" parent="PauseMenu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.243137, 0.243137, 0.243137, 0.835294)
+
+[node name="MenuTab" type="PanelContainer" parent="PauseMenu"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/MenuTab"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Seperator" type="Control" parent="PauseMenu/MenuTab/VBoxContainer"]
+layout_mode = 2
+
+[node name="PauseTitle" type="Label" parent="PauseMenu/MenuTab/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_fonts/font = ExtResource("4_buolf")
+theme_override_font_sizes/font_size = 64
+text = "PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PauseMenu/MenuTab"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu/MenuTab/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="Seperator2" type="Control" parent="PauseMenu/MenuTab/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seperator3" type="Control" parent="PauseMenu/MenuTab/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ResumeGameButton" type="Button" parent="PauseMenu/MenuTab/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ppvgl")
+theme_override_font_sizes/font_size = 30
+text = "Resume"
+
+[node name="OptionsButton" type="Button" parent="PauseMenu/MenuTab/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ppvgl")
+theme_override_font_sizes/font_size = 30
+text = "Options"
+
+[node name="ExitButton" type="Button" parent="PauseMenu/MenuTab/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ppvgl")
+theme_override_font_sizes/font_size = 30
+text = "Exit"
+
+[connection signal="pressed" from="PauseMenu/MenuTab/HBoxContainer/VBoxContainer/ResumeGameButton" to="GameManager" method="OnReturnGameBtnPressed"]
+[connection signal="pressed" from="PauseMenu/MenuTab/HBoxContainer/VBoxContainer/ExitButton" to="GameManager" method="OnQuitGameBtnPressed"]

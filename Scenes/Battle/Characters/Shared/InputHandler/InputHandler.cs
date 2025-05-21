@@ -12,15 +12,15 @@ public partial class InputHandler : Node
     {
         public string movementInput, attackInput;
 
-        public PlayerInput(string movementInput, string attackInput)
-        {
-            this.movementInput = movementInput;
-            this.attackInput = attackInput;
-        }
-    }
+		public PlayerInput(string movementInput, string attackInput)
+		{
+			this.movementInput = movementInput;
+			this.attackInput = attackInput;
+		}
+	}
 
-    private PlayerInput currentInput;
-    private CharacterStateMachine characterStateMachine;
+	private PlayerInput currentInput;
+	private CharacterStateMachine characterStateMachine;
 
     //this is used so we can check if we are moving "back" into neutral...
     //otherwise we will have a constant "input" read of "5" being inserted into the input reader...
@@ -158,81 +158,81 @@ public partial class InputHandler : Node
     }
 
 
-    private string GetMovementInput(InputEvent @event)
-    {
-        string movementInput = "";
-        //gets whether we are moving up, down, left or right or if opp directions pushed simultaneously
-        float depthAxis = Input.GetAxis("Walk_Down", "Walk_Up");
-        float horizontalAxis = Input.GetAxis("Walk_Left", "Walk_Right");
+	private string GetMovementInput(InputEvent @event)
+	{
+		string movementInput = "";
+		//gets whether we are moving up, down, left or right or if opp directions pushed simultaneously
+		float depthAxis = Input.GetAxis("Walk_Down", "Walk_Up");
+		float horizontalAxis = Input.GetAxis("Walk_Left", "Walk_Right");
 
-        bool up = depthAxis > 0;
-        bool down = depthAxis < 0;
-        bool right = horizontalAxis > 0;
-        bool left = horizontalAxis < 0;
+		bool up = depthAxis > 0;
+		bool down = depthAxis < 0;
+		bool right = horizontalAxis > 0;
+		bool left = horizontalAxis < 0;
 
-        if (up && right)
-        {
-            movementInput = "9";
-        }
-        else if (up && left)
-        {
-            movementInput = "7";
-        }
-        else if (down && right)
-        {
-            movementInput = "3";
-        }
-        else if (down && left)
-        {
-            movementInput = "1";
-        }
-        else if (up)
-        {
-            movementInput = "8";
-        }
-        else if (down)
-        {
-            movementInput = "2";
-        }
-        else if (right)
-        {
-            movementInput = "6";
-        }
-        else if (left)
-        {
-            movementInput = "4";
-        }
-        movementInput = movementInput == "" ? "5" : movementInput;
+		if (up && right)
+		{
+			movementInput = "9";
+		}
+		else if (up && left)
+		{
+			movementInput = "7";
+		}
+		else if (down && right)
+		{
+			movementInput = "3";
+		}
+		else if (down && left)
+		{
+			movementInput = "1";
+		}
+		else if (up)
+		{
+			movementInput = "8";
+		}
+		else if (down)
+		{
+			movementInput = "2";
+		}
+		else if (right)
+		{
+			movementInput = "6";
+		}
+		else if (left)
+		{
+			movementInput = "4";
+		}
+		movementInput = movementInput == "" ? "5" : movementInput;
 
-        return movementInput;
-    }
+		return movementInput;
+	}
 
-    private string GetAttackInput(InputEvent @event)
-    {
-        string attackInput = "";
-        if (Input.IsActionJustPressed("Punch"))
-        {
-            attackInput += "P";
-        }
-        if (Input.IsActionJustPressed("Heavy_Punch"))
-        {
-            attackInput += "HP";
-        }
-        if (Input.IsActionJustPressed("Kick"))
-        {
-            attackInput += "K";
-        }
-        if (Input.IsActionJustPressed("Heavy_Kick"))
-        {
-            attackInput += "HK";
-        }
+	private string GetAttackInput(InputEvent @event)
+	{
+		string attackInput = "";
+		if (Input.IsActionJustPressed("Punch"))
+		{
+			attackInput += "P";
+		}
+		if (Input.IsActionJustPressed("Heavy_Punch"))
+		{
+			attackInput += "HP";
+		}
+		if (Input.IsActionJustPressed("Kick"))
+		{
+			attackInput += "K";
+		}
+		if (Input.IsActionJustPressed("Heavy_Kick"))
+		{
+			attackInput += "HK";
+		}
 
-        return attackInput;
-    }
+		return attackInput;
+	}
 
-    internal void SetStateMachine(CharacterStateMachine stateMachine)
-    {
-        characterStateMachine = stateMachine;
-    }
+	internal void SetStateMachine(CharacterStateMachine stateMachine)
+	{
+		characterStateMachine = stateMachine;
+	}
 
 }
