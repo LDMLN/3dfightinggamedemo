@@ -29,7 +29,7 @@ public partial class AttackingState : CharacterState
 
     public override void HandleInput(string movementInput, string attackInput)
     {
-        GD.Print("handling input from ATTACK STATE:\n " + "movementInput: " + movementInput + "\nattackInput: " + attackInput);
+        //GD.Print("handling input from ATTACK STATE:\n " + "movementInput: " + movementInput + "\nattackInput: " + attackInput);
         if (attackInput != "")
         {
             Attack(movementInput, attackInput);

@@ -7,7 +7,7 @@ public partial class MovingState : CharacterState
 
     public override void Enter(string movementInput, string attackInput)
     {
-        GD.Print("Enter(Inputs version!): movement: " + movementInput, "\nattack: " + attackInput);
+        //GD.Print("Enter(Inputs version!): movement: " + movementInput, "\nattack: " + attackInput);
         stateLabel.Text = "Moving";
         stateLabel.Modulate = Color.Color8(255, 0, 255, 255);
         //we are only concered with THIS movement, the button just pressed. nothing previous matters (yet)
