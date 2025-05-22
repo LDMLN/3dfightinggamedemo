@@ -42,6 +42,13 @@ public partial class Character : CharacterBody3D
 	//this is the center of the player model, used for camera since model transform is currently set at the feet.
 	private Node3D characterCenter;
 
+	/*
+	 * Hit Box and Opponent's Hurt Layer:
+	 */
+	private Area3D _hitBox;
+	[Export(PropertyHint.Layers3DPhysics)]
+	private uint _enemyHurtLayer;
+
 	string cardinals = "2468";
 
 	public override void _Ready()
@@ -61,6 +68,15 @@ public partial class Character : CharacterBody3D
 		stateMachine = GetNode<CharacterStateMachine>("%CharacterStateMachine");
 		characterInputHandler.SetStateMachine(stateMachine);
 
+		/*
+		 * Get reference to Hit Box:
+		 */
+		_hitBox = GetNodeOrNull<Area3D>("Armature/Hit Box");
+		if (_hitBox != null)
+		{
+			// Set Hit Box Collision Mask to be the Opponent's Collision Layer
+			_hitBox.CollisionMask = _enemyHurtLayer;
+		}
 	}
 
 	public void InitializeStateMachine(Character targetCharacter, BattleCamera currentBattleCamera)
@@ -81,6 +97,21 @@ public partial class Character : CharacterBody3D
 	public void SetEnemyCharacter(Character enemy)
 	{
 		enemyCharacter = enemy;
+	}
+
+	public void ActivateHitBoxTrue() => ActivateHitBox(true);
+	public void ActivateHitBoxFalse() => ActivateHitBox(false);
+
+	/// <summary>
+	/// Function for activating the Hit Box during attack animations.
+	/// </summary>
+	/// <param name="active">Boolean parameter for specifying if the Hit Box is activated or not.</param>
+	public void ActivateHitBox(bool active)
+	{
+		if (_hitBox != null)
+		{
+			_hitBox.Monitoring = active;
+		}
 	}
 
 	private void Died()
