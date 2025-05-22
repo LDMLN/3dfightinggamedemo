@@ -72,8 +72,6 @@ public partial class AttackingState : CharacterState
 
 	private void Attack(string movementInput, string attackInput)
 	{
-		GD.Print("ATTACKING!!!!");
-
 		string attackAnimation = "";  // Set animation name based on input
 
 		if (movementInput != "5")
@@ -86,22 +84,22 @@ public partial class AttackingState : CharacterState
 			{
 				//punch animation
 				//do hitbox/hurtbox for punch attack logic
-				GD.Print("Punch!");
+				//GD.Print("Punch!");
 				attackAnimation = "Jab Punch";
 			}
 			else if (attackInput == "HP")
 			{
-				GD.Print("Heavy Punch!");
+				//GD.Print("Heavy Punch!");
 				attackAnimation = "Hook Punch";
 			}
 			else if (attackInput == "K")
 			{
-				GD.Print("Kick!");
+				//GD.Print("Kick!");
 				attackAnimation = "Kick";
 			}
 			else
 			{
-				GD.Print("Heavy Kick!");
+				//GD.Print("Heavy Kick!");
 				attackAnimation = "Roundhouse Kick";
 			}
 		}
