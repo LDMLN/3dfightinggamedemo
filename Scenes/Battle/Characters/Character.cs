@@ -49,12 +49,29 @@ public partial class Character : CharacterBody3D
 	[Export(PropertyHint.Layers3DPhysics)]
 	private uint _enemyHurtLayer;
 
+	/* 
+	 * Hurt Box implementation:
+	 */
+	[Export] private int _maxHealth = 10;
+	private int _currentHealth;
+	private bool _isDead;
+	private Area3D _hurtBox;
+
+	[Signal] public delegate void HealthChangedEventHandler(float percentage);
+	// [Signal] public delegate void DiedEventHandler();
+
+	/*
+	 * For testing hitboxes and hurtboxes:
+	 */
+	private StandardMaterial3D baseColorMat;
+	private StandardMaterial3D flashRedMat = new StandardMaterial3D() { AlbedoColor = new Color(1.0f, 0.0f, 0.0f) };
+	private float flashDuration = 0.2f;
+
 	string cardinals = "2468";
 
 	public override void _Ready()
 	{
 		// characterMesh = GetNode<MeshInstance3D>("MeshInstance3D");
-		// baseColorMat = (StandardMaterial3D)characterMesh.GetSurfaceOverrideMaterial(0);
 
 		// Get references to the new structure components
 		armature = GetNode<Node3D>("Armature");
@@ -62,11 +79,23 @@ public partial class Character : CharacterBody3D
 		animPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		animTree = GetNode<AnimationTree>("AnimationTree");
 		characterMesh = GetNode<MeshInstance3D>("%Guard02");
+
+		/*
+		 * For testing hitboxes and hurtboxes:
+		 */
+		baseColorMat = (StandardMaterial3D)characterMesh.GetSurfaceOverrideMaterial(0);
+
 		characterCenter = GetNode<Node3D>("%CharacterCenter");
 
 		characterInputHandler = GetNode<InputHandler>("%InputHandler");
 		stateMachine = GetNode<CharacterStateMachine>("%CharacterStateMachine");
 		characterInputHandler.SetStateMachine(stateMachine);
+
+		/*
+		 * Set Health and get reference to Hurt Box:
+		 */
+		_currentHealth = _maxHealth;
+		_hurtBox = GetNode<Area3D>("Hurt Box");
 
 		/*
 		 * Get reference to Hit Box:
@@ -76,6 +105,98 @@ public partial class Character : CharacterBody3D
 		{
 			// Set Hit Box Collision Mask to be the Opponent's Collision Layer
 			_hitBox.CollisionMask = _enemyHurtLayer;
+
+			// Connect signal "_on_hit_box_area_entered"
+			_hitBox.AreaEntered += OnHitBoxAreaEntered;
+		}
+	}
+
+	/// <summary>
+	/// Applies damage when hit box enters a hurt box.
+	/// </summary>
+	/// <param name="hurtBox">The Area3D this hit box entered.</param>
+	private void OnHitBoxAreaEntered(Area3D hurtBox)
+	{
+		if (hurtBox.GetParent() is Character otherCharacter)
+		{
+			GD.Print("Took damage!");
+			otherCharacter.TakeDamage(1); // Damage is hard coded for testing purposes
+
+			// Immediately disable hitbox so it can't hit again
+			ActivateHitBox(false);
+		}
+	}
+
+	/// <summary>
+	/// Handles damage and death logic.
+	/// </summary>
+	/// <param name="amount">The amount of damage to apply.</param>
+	public void TakeDamage(int amount)
+	{
+		_currentHealth = Mathf.Max(_currentHealth - amount, 0);
+		InterruptActions();
+
+		/*
+		 * For testing hitboxes and hurtboxes:
+		 */
+		// FlashRed();
+
+		EmitSignal(SignalName.HealthChanged, (float)_currentHealth / _maxHealth);
+
+		if (_currentHealth == 0)
+		{
+			_isDead = true;
+			GD.Print("Fatality!");
+			// EmitSignal(SignalName.Died);
+			CollisionLayer = 0;
+			CollisionMask = 1;
+
+			if (_hurtBox != null)
+			{
+				_hurtBox.SetDeferred("monitorable", false);
+			}
+		}
+		else
+		{
+			if (animPlayer != null)
+			{
+				// Play hit animation
+			}
+		}
+	}
+
+	/*
+	 * For testing hitboxes and hurtboxes:
+	 */
+	// private async void FlashRed()
+	// {
+	// 	if (characterMesh == null || flashRedMat == null || baseColorMat == null)
+	// 	{
+	// 		return;
+	// 	}
+
+	// 	characterMesh.SetSurfaceOverrideMaterial(0, flashRedMat);
+	// 	await ToSignal(GetTree().CreateTimer(flashDuration), SceneTreeTimer.SignalName.Timeout);
+	// 	characterMesh.SetSurfaceOverrideMaterial(0, baseColorMat);
+	// }
+
+	/// <summary>
+	/// Interrupts active actions -- called when a character takes damage.
+	/// </summary>
+	private void InterruptActions()
+	{
+		DeactivateAllHitBoxes();
+	}
+
+	/// <summary>
+	/// Disables active hit boxes to prevent further damage from being registered.
+	/// Called when actions are interrupted.
+	/// </summary>
+	private void DeactivateAllHitBoxes()
+	{
+		if (_hitBox != null)
+		{
+			_hitBox.Monitoring = false;
 		}
 	}
 
