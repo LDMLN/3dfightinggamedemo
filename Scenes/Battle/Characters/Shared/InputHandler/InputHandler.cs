@@ -6,21 +6,28 @@ using System.Linq;
 [GlobalClass]
 public partial class InputHandler : Node
 {
+    //using this to stop the player2 from reading inputs atm
     [Export] bool active = true;
 
     public struct PlayerInput
     {
+        public ulong inputTime;
         public string movementInput, attackInput;
 
-		public PlayerInput(string movementInput, string attackInput)
+		public PlayerInput(string movementInput, string attackInput, ulong inputTime)
 		{
+            this.inputTime = inputTime;
 			this.movementInput = movementInput;
 			this.attackInput = attackInput;
 		}
 	}
 
+    Dictionary<string, string> moveList = new Dictionary<string, string> { ["236"] = "FIREBALL", ["63236"] = "DRAGON-UPPER" };
+
 	private PlayerInput currentInput;
 	private CharacterStateMachine characterStateMachine;
+
+    const int DESIRED_FRAME_BUFFER = 8;
 
     //this is used so we can check if we are moving "back" into neutral...
     //otherwise we will have a constant "input" read of "5" being inserted into the input reader...
@@ -32,13 +39,15 @@ public partial class InputHandler : Node
 
     private ulong startTime = 0;
     private ulong elapsedTime = 0;
-    private int bufferFrames = 102; //should be roughly 6 frames (1000/60*6)
+    //msec/fps * desiredFrames... is what we want to do, but this is int division, so we're going to force a round up, make it more lenient
+    private int bufferFrames = (1000 / Engine.PhysicsTicksPerSecond + 1) * DESIRED_FRAME_BUFFER; 
 
-    List<string> inputList = new List<string>();
-    Dictionary<ulong, string> inputDict= new Dictionary<ulong, string>();
+    List<PlayerInput> playerInputList = new List<PlayerInput>();
 
     public override void _Ready()
     {
+        GD.Print("physics ticks: " + Engine.PhysicsTicksPerSecond);
+        GD.Print("current frame buffer: " + bufferFrames);
         startTime = Time.GetTicksMsec();
     }
 
@@ -56,104 +65,100 @@ public partial class InputHandler : Node
         return;
     }
 
-    //TODO: this still isn't really working... have to fix it.
+    //TODO: this is working better!
+    //we need something that checks whether a button pressed has been released... and until that is true, it CANNOT be added to inputDict again.
+    //this will help prevent overrides where we 6HP, but the 6 was SLIGHTLY before the HP and so therefore we get something like
+    // 6
+    // 6HP
+    // when it should just be 
+    // 6
+    // HP
     public override void _Input(InputEvent @event)
     {
         if (!active)
         {
             return;
         }
-        
-        currentInput = new PlayerInput();
+
         currentInput = TranslateInput(@event);
         if (@event is InputEventMouseMotion && currentInput.attackInput == "" && currentInput.movementInput == "5")
         {
             return;
         }
-        //the character class is translating the input and then passing to the state machine...
-        //feels gross... should probalby have an "inputHandler" class that does this...
-        elapsedTime = Time.GetTicksMsec() - startTime;
-        if (@event.IsActionPressed("Punch"))
+        UpdateInputBuffer(currentInput);
+        //quick bit of code to prove that it works
+        if (currentInput.attackInput == "P" || currentInput.attackInput == "HP")
         {
-            GD.Print("current input attack button(PRESSED):" + currentInput.attackInput);
-        }
-        if (@event.IsActionReleased("Punch"))
-        {
-            GD.Print("current input attack button (RELEASED):" + currentInput.attackInput);
-        }
-        if (currentInput.attackInput != "" || currentInput.movementInput != "5")
-        {
-            //GD.Print("!!!!!frame buffer extended!!!!!!");
-            framesSinceLastInput = 0;
-        }
-        //this could use some more special cases, but as of right now a neutral input does not reset the input buffer
-        else if (currentInput.movementInput == "5")
-        {
-            lastMovementInputWasNeutral = true;
-        }
-        if (inputDict.Count > 0)
-        {
-            GD.Print("last input's elapsed time: " + inputDict.Last().Key);
-            GD.Print("current elapsed time: " + elapsedTime);
-            GD.Print("inside the input buffer?" + (Math.Abs((decimal)inputDict.Last().Key - elapsedTime) < bufferFrames));
-        }
-        //TODO: also have to fix it so that things are only added to it once pressed or if held down and another button is pressed...
-        //except for neutral which should be added when NOTHING is pressed (this is working as is right now)
-        if (currentInput.movementInput != "5" && currentInput.attackInput != "")
-        {
-            if (inputDict.Count > 0 && Math.Abs((decimal)inputDict.Last().Key - elapsedTime) < bufferFrames)
+            string recentInputs = "";
+            foreach (PlayerInput recentInput in playerInputList)
             {
-                //GD.Print("adding a command normal input! to inputDict and continuing");
-                inputDict.Add(elapsedTime,currentInput.movementInput + currentInput.attackInput);
+                recentInputs += recentInput.movementInput;
+                if (moveList.ContainsKey(recentInputs))
+                {
+                    GD.Print(moveList[recentInputs]);
+                }
             }
-            else
-            {
-                //GD.Print("clearing inputDict and adding newest input!");
-                //inputDict.Clear();
-                inputDict.Add(elapsedTime,currentInput.movementInput + currentInput.attackInput);
-            }
-        }
-        else if (!lastMovementInputWasNeutral || currentInput.movementInput != "5")
-        {
-            if (inputDict.Count > 0 && Math.Abs((decimal)inputDict.Last().Key - elapsedTime) < bufferFrames)
-            {
-                inputDict.Add(elapsedTime,currentInput.movementInput);
-                //GD.Print("adding movement input to input dict!");
-            }
-            else
-            {
-                //GD.Print("clearing inputDict and adding newest input!");
-                //inputDict.Clear();
-                inputDict.Add(elapsedTime,currentInput.movementInput);
-            }
-            //inputList.Add(currentInput.movementInput);
-            //GD.Print(string.Join(",", inputList));
-        }
-        else if (currentInput.attackInput != "")
-        {
-            if (inputDict.Count > 0 && Math.Abs((decimal)inputDict.Last().Key - elapsedTime) < bufferFrames)
-            {
-                inputDict.Add(elapsedTime,currentInput.attackInput);
-                //GD.Print("adding movement input to input dict!");
-            }
-            else
-            {
-                //GD.Print("clearing inputDict and adding newest input!");
-                //inputDict.Clear();
-                inputDict.Add(elapsedTime,currentInput.attackInput);
-            }
-        }
-        foreach (ulong key in inputDict.Keys)
-        {
-            GD.Print("[" + key + ": " + inputDict[key] + "],");
         }
         characterStateMachine.PassInputToState(currentInput.movementInput, currentInput.attackInput);
     }
 
+    private void UpdateInputBuffer(PlayerInput currentInput)
+    {
+        //this could use some more special cases, but as of right now a neutral input does not reset the input buffer
+        if (currentInput.movementInput == "5")
+        {
+            lastMovementInputWasNeutral = true;
+        }
+        //TODO: also have to fix it so that things are only added to it once pressed or if held down and another button is pressed...
+        if (currentInput.movementInput != "5" && currentInput.attackInput != "")
+        {
+            if (playerInputList.Count > 0 && Math.Abs((decimal)playerInputList.Last().inputTime - elapsedTime) < bufferFrames)
+            {
+                playerInputList.Add(currentInput);
+            }
+            else
+            {
+                playerInputList.Clear();
+                playerInputList.Add(currentInput);
+            }
+        }
+        //TODO: we do need someway to handle putting in neutral inputs... even without ewgf movements, it could be useful...
+        else if (currentInput.movementInput != "5")
+        {
+            if (playerInputList.Count > 0 && Math.Abs((decimal)playerInputList.Last().inputTime - elapsedTime) < bufferFrames)
+            {
+                playerInputList.Add(currentInput);
+            }
+            else
+            {
+                playerInputList.Clear();
+                playerInputList.Add(currentInput);
+            }
+        }
+        else if (currentInput.attackInput != "")
+        {
+            if (playerInputList.Count > 0 && Math.Abs((decimal)playerInputList.Last().inputTime - elapsedTime) < bufferFrames)
+            {
+                playerInputList.Add(currentInput);
+            }
+            else
+            {
+                playerInputList.Clear();
+                playerInputList.Add(currentInput);
+            }
+        }
+
+        GD.Print("=================PRINTING CURRENT ARRAY!!!!========================");
+        foreach (PlayerInput input in playerInputList)
+        {
+            GD.Print("[" + input.inputTime + ": " + input.movementInput + " + " + input.attackInput + "],");
+        }
+    }
 
     public PlayerInput TranslateInput(InputEvent @event)
     {
-        return new PlayerInput(GetMovementInput(@event), GetAttackInput(@event));
+        elapsedTime = Time.GetTicksMsec() - startTime;
+        return new PlayerInput(GetMovementInput(@event), GetAttackInput(@event), elapsedTime);
         //we are building the movement string.
     }
 
