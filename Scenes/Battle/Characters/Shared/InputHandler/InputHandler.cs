@@ -22,6 +22,10 @@ public partial class InputHandler : Node
 		}
 	}
 
+    GenericMoveList genericMoveList = new();
+
+    Dictionary<string, Dictionary<string, string>> LeftSideGenericMoveList;
+
     Dictionary<string, string> moveList = new Dictionary<string, string> { ["236"] = "FIREBALL", ["63236"] = "DRAGON-UPPER" };
 
 	private PlayerInput currentInput;
@@ -33,9 +37,6 @@ public partial class InputHandler : Node
     //otherwise we will have a constant "input" read of "5" being inserted into the input reader...
     //hmmmmm but this is annoying... we don't have any ewgf movements so maybe we just ignore for simplicity???
     private bool lastMovementInputWasNeutral = false;
-
-    private int framesSinceLastInput = 0;
-    private int testFrames = 0;
 
     private ulong startTime = 0;
     private ulong elapsedTime = 0;
@@ -49,6 +50,7 @@ public partial class InputHandler : Node
         GD.Print("physics ticks: " + Engine.PhysicsTicksPerSecond);
         GD.Print("current frame buffer: " + bufferFrames);
         startTime = Time.GetTicksMsec();
+        LeftSideGenericMoveList = genericMoveList.GetLeftSideGenericMoveList();
     }
 
 
@@ -87,16 +89,13 @@ public partial class InputHandler : Node
         }
         UpdateInputBuffer(currentInput);
         //quick bit of code to prove that it works
-        if (currentInput.attackInput == "P" || currentInput.attackInput == "HP")
+        string recentInputs = "";
+        foreach (PlayerInput recentInput in playerInputList)
         {
-            string recentInputs = "";
-            foreach (PlayerInput recentInput in playerInputList)
+            recentInputs += recentInput.movementInput;
+            if (LeftSideGenericMoveList.ContainsKey(recentInputs))
             {
-                recentInputs += recentInput.movementInput;
-                if (moveList.ContainsKey(recentInputs))
-                {
-                    GD.Print(moveList[recentInputs]);
-                }
+                GD.Print(LeftSideGenericMoveList[recentInputs]["name"]);
             }
         }
         characterStateMachine.PassInputToState(currentInput.movementInput, currentInput.attackInput);
@@ -175,38 +174,51 @@ public partial class InputHandler : Node
 		bool right = horizontalAxis > 0;
 		bool left = horizontalAxis < 0;
 
-		if (up && right)
-		{
-			movementInput = "9";
-		}
-		else if (up && left)
-		{
-			movementInput = "7";
-		}
-		else if (down && right)
-		{
-			movementInput = "3";
-		}
-		else if (down && left)
-		{
-			movementInput = "1";
-		}
-		else if (up)
-		{
-			movementInput = "8";
-		}
-		else if (down)
-		{
-			movementInput = "2";
-		}
-		else if (right)
-		{
-			movementInput = "6";
-		}
-		else if (left)
-		{
-			movementInput = "4";
-		}
+        if (up && right)
+        {
+            movementInput = "9";
+        }
+        else if (up && left)
+        {
+            movementInput = "7";
+        }
+        else if (down && right)
+        {
+            movementInput = "3";
+        }
+        else if (down && left)
+        {
+            movementInput = "1";
+        }
+        //TODO: build off of this, trying to get tap/vs hold vs release figured out
+        else if (up)
+        {
+            if (Input.IsActionJustPressed("Walk_Up"))
+            {
+                GD.Print("just pressed up");
+                movementInput = "8";
+            }
+            if (@event is InputEventKey eventKey)
+            {
+                if (eventKey.IsActionReleased("Walk_Up"))
+                {
+                    GD.Print("just released up");
+                    movementInput = "8tap";
+                }
+            }
+        }
+        else if (down)
+        {
+            movementInput = "2";
+        }
+        else if (right)
+        {
+            movementInput = "6";
+        }
+        else if (left)
+        {
+            movementInput = "4";
+        }
 		movementInput = movementInput == "" ? "5" : movementInput;
 
 		return movementInput;
@@ -216,9 +228,9 @@ public partial class InputHandler : Node
 	{
 		string attackInput = "";
 		if (Input.IsActionJustPressed("Punch"))
-		{
-			attackInput += "P";
-		}
+        {
+            attackInput += "P";
+        }
 		if (Input.IsActionJustPressed("Heavy_Punch"))
 		{
 			attackInput += "HP";
