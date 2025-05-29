@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bprcvbu015hc4"]
+[gd_scene load_steps=9 format=3 uid="uid://bprcvbu015hc4"]
 
 [ext_resource type="FontFile" uid="uid://cajb5nas2nr0u" path="res://GeneralUILooks&Themes/Exo-Bold.ttf" id="1_5wsvm"]
 [ext_resource type="Script" uid="uid://b7fu16cbe058r" path="res://Scripts/MainMenu.cs" id="1_o14dv"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://ccwwy14heluji" path="res://Scripts/MenuSwap.cs" id="5_4pqbp"]
 [ext_resource type="Script" uid="uid://dj3vfkxrkvrh7" path="res://Scenes/UI/LoadScene.cs" id="5_gih0s"]
 [ext_resource type="PackedScene" uid="uid://d0pty7blxma1u" path="res://Scenes/Battle/Battle.tscn" id="6_gih0s"]
+[ext_resource type="PackedScene" uid="uid://deg3gronb4jws" path="res://Scenes/BattleVSEnemy/BattleVsEnemy.tscn" id="7_k33u3"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -39,7 +40,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 24
 theme_override_fonts/font = ExtResource("1_5wsvm")
 theme_override_font_sizes/font_size = 64
-text = "GAME TITLE TBD"
+text = "SWOLE CALIBUR"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -63,9 +64,18 @@ custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_i2xx2")
 theme_override_font_sizes/font_size = 30
-text = "Fight!"
+text = "Player vs Player"
 script = ExtResource("5_gih0s")
 sceneToSwitchTo = ExtResource("6_gih0s")
+
+[node name="StartGameButton2" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_i2xx2")
+theme_override_font_sizes/font_size = 30
+text = "Player vs AI"
+script = ExtResource("5_gih0s")
+sceneToSwitchTo = ExtResource("7_k33u3")
 
 [node name="OptionsButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer" node_paths=PackedStringArray("SwitchToMenu")]
 custom_minimum_size = Vector2(120, 32)
