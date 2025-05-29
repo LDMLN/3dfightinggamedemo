@@ -1,0 +1,40 @@
+[gd_scene load_steps=8 format=3 uid="uid://deg3gronb4jws"]
+
+[ext_resource type="Script" uid="uid://w2yxvx70f4s2" path="res://Scenes/BattleVSEnemy/BattleVsEnemy.cs" id="1_a56si"]
+[ext_resource type="PackedScene" uid="uid://dqb1tdcels715" path="res://Scenes/Battle/Camera/BattleCamera.tscn" id="2_3lmes"]
+[ext_resource type="PackedScene" uid="uid://bkpslchvx6d17" path="res://Scenes/Battle/Stages/OceanStage.tscn" id="3_3c77p"]
+[ext_resource type="PackedScene" uid="uid://dkee6s1qas0l" path="res://Scenes/Battle/Characters/Character.tscn" id="4_uivuw"]
+[ext_resource type="PackedScene" uid="uid://nf62w0fvwyx0" path="res://Scenes/BattleVSEnemy/EnemyAI/Enemy.tscn" id="5_ya7lh"]
+[ext_resource type="PackedScene" uid="uid://bjgiief1yi8c2" path="res://GeneralUILooks&Themes/hud.tscn" id="6_qgx81"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_a56si"]
+vertices = PackedVector3Array(-7.15213, 1.08786, -5.64857, -7.15213, 1.08786, 7.60143, 7.09787, 1.08786, 7.60143, 7.09787, 1.08786, -5.64857)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
+
+[node name="Battle" type="Node3D"]
+script = ExtResource("1_a56si")
+
+[node name="BattleCamera" parent="." instance=ExtResource("2_3lmes")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.953407, 0.301688, 0, -0.301688, 0.953407, -0.0236464, 6.18086, 5.252)
+
+[node name="OceanStage" parent="." instance=ExtResource("3_3c77p")]
+
+[node name="Character" parent="." instance=ExtResource("4_uivuw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.16612, 3.2, 0)
+collision_mask = 5
+whichPlayer = 1
+
+[node name="Enemy" parent="." instance=ExtResource("5_ya7lh")]
+transform = Transform3D(-0.685323, 0, 0.728239, 0, 1, 0, -0.728239, 0, -0.685323, 0, 3.23957, 0)
+
+[node name="HUD" parent="." instance=ExtResource("6_qgx81")]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+transform = Transform3D(1.43758, 0, 0, 0, 1.35905, 0, 0, 0, 1, -1.04014, 2.78427, -1.07272)
+navigation_mesh = SubResource("NavigationMesh_a56si")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="NavigationRegion3D"]
+transform = Transform3D(1.53043, 0, 0, 0, 1.32427, 0, 0, 0, 1.41575, 0, 0, 0.930165)
+use_collision = true
+size = Vector3(10, 1, 10)
