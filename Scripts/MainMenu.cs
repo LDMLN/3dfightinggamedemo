@@ -5,6 +5,9 @@ using System.Linq;
 
 public partial class MainMenu : Control
 {
+    [Export]
+    AudioStreamPlayer buttonSFX;
+
     //Holds indexes of menus
     List<int> goBacklist = new();
     private Game gameController;
@@ -48,6 +51,10 @@ public partial class MainMenu : Control
 
     // function to quit game
     public void OnQuitGameBtnPressed(){
+        // button sfx
+        buttonSFX.Play();
+
+        // quit functionality
         GetTree().Quit();
     }
 }

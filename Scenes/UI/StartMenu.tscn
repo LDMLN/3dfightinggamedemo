@@ -1,7 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://bu450rk54y3ll"]
+[gd_scene load_steps=20 format=3 uid="uid://bu450rk54y3ll"]
 
 [ext_resource type="Shader" uid="uid://bcid4rv3uq84q" path="res://Scenes/Shaders/StageShaders/Water.gdshader" id="1_7sc2f"]
+[ext_resource type="Script" uid="uid://mnnk01kgwmwb" path="res://Scenes/UI/StartMenu.cs" id="1_k44vq"]
 [ext_resource type="PackedScene" uid="uid://bprcvbu015hc4" path="res://Scenes/UI/main_menu.tscn" id="2_7sc2f"]
+[ext_resource type="AudioStream" uid="uid://dbtedg807oocs" path="res://Audio/650284__muzaproduction__arcade-loop.wav" id="3_omsb3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_omsb3"]
 sky_top_color = Color(0.192209, 0.61834, 0.896268, 1)
@@ -66,6 +68,7 @@ subdivide_width = 40
 subdivide_depth = 40
 
 [node name="StartMenu" type="CanvasLayer"]
+script = ExtResource("1_k44vq")
 
 [node name="StartMenuBackground" type="Node3D" parent="."]
 
@@ -120,3 +123,8 @@ mesh = SubResource("PlaneMesh_cyf88")
 skeleton = NodePath("../..")
 
 [node name="MainMenu" parent="." instance=ExtResource("2_7sc2f")]
+
+[node name="StartMenuMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_omsb3")
+volume_db = -10.0
+autoplay = true
