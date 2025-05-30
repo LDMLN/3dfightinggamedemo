@@ -19,6 +19,7 @@ public partial class LoadScene : Button
         // button sfx
         buttonSFX.Play();
         
+        GD.Print("pressing the button");
         // Need 3 GetParents because the button is 3 nodes down from the MenuTab
         if (GetParent().GetParent().GetParent() is MenuTab menuTab)
         {
