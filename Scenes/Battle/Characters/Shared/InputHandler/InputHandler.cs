@@ -9,18 +9,25 @@ public partial class InputHandler : Node
     //using this to stop the player2 from reading inputs atm
     [Export] bool active = true;
 
+    ulong upPressedTime;
+    ulong upReleasedTime;
+    bool jumped = false;
+    ulong downPressedTime;
+    ulong downReleasedTime;
+    bool crouched = false;
+
     public struct PlayerInput
     {
         public ulong inputTime;
         public string movementInput, attackInput;
 
-		public PlayerInput(string movementInput, string attackInput, ulong inputTime)
-		{
+        public PlayerInput(string movementInput, string attackInput, ulong inputTime)
+        {
             this.inputTime = inputTime;
-			this.movementInput = movementInput;
-			this.attackInput = attackInput;
-		}
-	}
+            this.movementInput = movementInput;
+            this.attackInput = attackInput;
+        }
+    }
 
     GenericMoveList genericMoveList = new();
 
@@ -81,8 +88,50 @@ public partial class InputHandler : Node
         {
             return;
         }
+        elapsedTime = Time.GetTicksMsec() - startTime;
 
-        currentInput = TranslateInput(@event);
+        //have to handle this here instead of inside the "translateInput" function because of how
+        //the "IsActionJustReleased" call works unfortunately.
+        if (Input.IsActionJustPressed("Walk_Up") || Input.IsActionJustReleased("Walk_Up") || Input.IsActionPressed("Walk_Up") || Input.IsActionJustPressed("Walk_Down"))
+        {
+            if (Input.IsActionJustPressed("Walk_Up"))
+            {
+                GD.Print("got a press up input!");
+                upPressedTime = elapsedTime;
+            }
+            else if (Input.IsActionPressed("Walk_Up"))
+            {
+                if (Math.Abs((decimal)elapsedTime - upPressedTime) > bufferFrames)
+                {
+                    jumped = true;
+                    GD.Print("jump Up");
+                }
+            }
+            else if (Input.IsActionJustReleased("Walk_Up"))
+            {
+                GD.Print("got a release input!");
+                GD.Print("Time now: " + elapsedTime);
+                GD.Print("when Up pressed: " + upPressedTime);
+                if (!jumped & Math.Abs((decimal)elapsedTime - upPressedTime) < bufferFrames)
+                {
+                    GD.Print("move up");
+                }
+            }
+
+            if (Input.IsActionJustPressed("Walk_Down"))
+            {
+                downPressedTime = elapsedTime;
+            }
+            else if (Input.IsActionJustReleased("Walk_Down"))
+            {
+                downReleasedTime = elapsedTime;
+            }
+        }
+        else
+        {
+            currentInput = TranslateInput(@event);
+        }
+
         if (@event is InputEventMouseMotion && currentInput.attackInput == "" && currentInput.movementInput == "5")
         {
             return;
@@ -156,7 +205,6 @@ public partial class InputHandler : Node
 
     public PlayerInput TranslateInput(InputEvent @event)
     {
-        elapsedTime = Time.GetTicksMsec() - startTime;
         return new PlayerInput(GetMovementInput(@event), GetAttackInput(@event), elapsedTime);
         //we are building the movement string.
     }
@@ -193,19 +241,7 @@ public partial class InputHandler : Node
         //TODO: build off of this, trying to get tap/vs hold vs release figured out
         else if (up)
         {
-            if (Input.IsActionJustPressed("Walk_Up"))
-            {
-                GD.Print("just pressed up");
-                movementInput = "8";
-            }
-            if (@event is InputEventKey eventKey)
-            {
-                if (eventKey.IsActionReleased("Walk_Up"))
-                {
-                    GD.Print("just released up");
-                    movementInput = "8tap";
-                }
-            }
+            movementInput = "8";
         }
         else if (down)
         {
