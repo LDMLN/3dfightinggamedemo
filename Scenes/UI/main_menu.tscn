@@ -1,15 +1,16 @@
-[gd_scene load_steps=9 format=3 uid="uid://bprcvbu015hc4"]
+[gd_scene load_steps=10 format=3 uid="uid://bprcvbu015hc4"]
 
 [ext_resource type="FontFile" uid="uid://cajb5nas2nr0u" path="res://GeneralUILooks&Themes/Exo-Bold.ttf" id="1_5wsvm"]
 [ext_resource type="Script" uid="uid://b7fu16cbe058r" path="res://Scripts/MainMenu.cs" id="1_o14dv"]
 [ext_resource type="FontFile" uid="uid://bs2jq24et147r" path="res://GeneralUILooks&Themes/Exo-Regular.ttf" id="2_i2xx2"]
+[ext_resource type="AudioStream" uid="uid://c7oaa1rxkch43" path="res://Audio/ui-button-press.wav" id="2_lrjdf"]
 [ext_resource type="Script" uid="uid://b07r68s2swqis" path="res://Scripts/MenuTab.cs" id="2_mrfpk"]
 [ext_resource type="Script" uid="uid://ccwwy14heluji" path="res://Scripts/MenuSwap.cs" id="5_4pqbp"]
 [ext_resource type="Script" uid="uid://dj3vfkxrkvrh7" path="res://Scenes/UI/LoadScene.cs" id="5_gih0s"]
 [ext_resource type="PackedScene" uid="uid://d0pty7blxma1u" path="res://Scenes/Battle/Battle.tscn" id="6_gih0s"]
 [ext_resource type="PackedScene" uid="uid://deg3gronb4jws" path="res://Scenes/BattleVSEnemy/BattleVsEnemy.tscn" id="7_k33u3"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("buttonSFX")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,8 +18,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_o14dv")
+buttonSFX = NodePath("ButtonSFX")
 
-[node name="MenuTab" type="PanelContainer" parent="."]
+[node name="ButtonSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_lrjdf")
+volume_db = 5.0
+max_polyphony = 2
+
+[node name="MenuTab" type="PanelContainer" parent="." node_paths=PackedStringArray("buttonSFX")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,6 +33,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_mrfpk")
+buttonSFX = NodePath("../ButtonSFX")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuTab"]
 layout_mode = 2
@@ -59,7 +67,7 @@ layout_mode = 2
 [node name="Seperator3" type="Control" parent="MenuTab/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="StartGameButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer"]
+[node name="StartGameButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer" node_paths=PackedStringArray("buttonSFX")]
 custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_i2xx2")
@@ -67,8 +75,9 @@ theme_override_font_sizes/font_size = 30
 text = "Player vs Player"
 script = ExtResource("5_gih0s")
 sceneToSwitchTo = ExtResource("6_gih0s")
+buttonSFX = NodePath("../../../../ButtonSFX")
 
-[node name="StartGameButton2" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer"]
+[node name="StartGameButton2" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer" node_paths=PackedStringArray("buttonSFX")]
 custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_i2xx2")
@@ -76,8 +85,9 @@ theme_override_font_sizes/font_size = 30
 text = "Player vs AI"
 script = ExtResource("5_gih0s")
 sceneToSwitchTo = ExtResource("7_k33u3")
+buttonSFX = NodePath("../../../../ButtonSFX")
 
-[node name="OptionsButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer" node_paths=PackedStringArray("SwitchToMenu")]
+[node name="OptionsButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer" node_paths=PackedStringArray("SwitchToMenu", "buttonSFX")]
 custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_i2xx2")
@@ -85,6 +95,7 @@ theme_override_font_sizes/font_size = 30
 text = "Options"
 script = ExtResource("5_4pqbp")
 SwitchToMenu = NodePath("../../../../MenuTab2")
+buttonSFX = NodePath("../../../../ButtonSFX")
 
 [node name="ExitButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(120, 32)
