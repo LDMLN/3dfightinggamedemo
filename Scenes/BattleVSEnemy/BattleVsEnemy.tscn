@@ -1,11 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://deg3gronb4jws"]
+[gd_scene load_steps=9 format=3 uid="uid://deg3gronb4jws"]
 
 [ext_resource type="Script" uid="uid://w2yxvx70f4s2" path="res://Scenes/BattleVSEnemy/BattleVsEnemy.cs" id="1_a56si"]
 [ext_resource type="PackedScene" uid="uid://dqb1tdcels715" path="res://Scenes/Battle/Camera/BattleCamera.tscn" id="2_3lmes"]
 [ext_resource type="PackedScene" uid="uid://bkpslchvx6d17" path="res://Scenes/Battle/Stages/OceanStage.tscn" id="3_3c77p"]
 [ext_resource type="PackedScene" uid="uid://dkee6s1qas0l" path="res://Scenes/Battle/Characters/Character.tscn" id="4_uivuw"]
 [ext_resource type="PackedScene" uid="uid://nf62w0fvwyx0" path="res://Scenes/BattleVSEnemy/EnemyAI/Enemy.tscn" id="5_ya7lh"]
-[ext_resource type="PackedScene" uid="uid://bjgiief1yi8c2" path="res://GeneralUILooks&Themes/hud.tscn" id="6_qgx81"]
+[ext_resource type="PackedScene" uid="uid://bjgiief1yi8c2" path="res://Scenes/UI/hud.tscn" id="6_qgx81"]
+[ext_resource type="AudioStream" uid="uid://tfc57k4glbjf" path="res://Audio/388101__furbyguy__90s-game-loop.wav" id="7_3lmes"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_a56si"]
 vertices = PackedVector3Array(-7.15213, 1.08786, -5.64857, -7.15213, 1.08786, 7.60143, 7.09787, 1.08786, 7.60143, 7.09787, 1.08786, -5.64857)
@@ -38,3 +39,8 @@ navigation_mesh = SubResource("NavigationMesh_a56si")
 transform = Transform3D(1.53043, 0, 0, 0, 1.32427, 0, 0, 0, 1.41575, 0, 0, 0.930165)
 use_collision = true
 size = Vector3(10, 1, 10)
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_3lmes")
+volume_db = -7.0
+autoplay = true
