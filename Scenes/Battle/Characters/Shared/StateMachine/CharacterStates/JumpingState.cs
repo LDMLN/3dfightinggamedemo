@@ -41,10 +41,11 @@ public partial class JumpingState : CharacterState
         }
         else if (movementInput == "1" || movementInput == "3")
         {
-                EmitSignal(SignalName.TransitionRequested, (int)State.Jumping, (int)State.Crouching, movementInput, attackInput); 
+            EmitSignal(SignalName.TransitionRequested, (int)State.Jumping, (int)State.Crouching, movementInput, attackInput);
         }
-        else{
-                Jump(movementInput);
+        else
+        {
+            Jump(movementInput);
         }
     }
 

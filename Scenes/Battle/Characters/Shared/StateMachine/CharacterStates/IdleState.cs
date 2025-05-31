@@ -62,7 +62,7 @@ public partial class IdleState : CharacterState
 			}
 			else if (movementInput == "1" || movementInput == "3")
 			{
-				EmitSignal(SignalName.TransitionRequested, (int)State.Idle, (int)State.Crouching, movementInput, attackInput); 
+				EmitSignal(SignalName.TransitionRequested, (int)State.Idle, (int)State.Crouching, movementInput, attackInput);
 			}
 		}
 	}

@@ -62,12 +62,12 @@ public partial class CharacterStateMachine : Node
 
 
 
-    private void OnTransitionRequested(int From, int To, string MovementInput, string AttackInput)
-    {
-        //GD.Print("transition requestion... From: " + From + " To: " + To);
-        if (states[From] != currentState) { return; }
-        CharacterState nextState = states[To];
-        if (nextState == null) { return; }
+	private void OnTransitionRequested(int From, int To, string MovementInput, string AttackInput)
+	{
+		//GD.Print("transition requestion... From: " + From + " To: " + To);
+		if (states[From] != currentState) { return; }
+		CharacterState nextState = states[To];
+		if (nextState == null) { return; }
 
 		//exit the current state if we have it
 		currentState?.Exit();
