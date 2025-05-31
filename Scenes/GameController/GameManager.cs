@@ -4,6 +4,8 @@ using System;
 public partial class GameManager : Node
 {
     public static GameManager Instance {get; private set;}
+    [Export]
+    AudioStreamPlayer buttonSFX;
 
     [Signal]
     public delegate void GamePauseToggleEventHandler(bool isPaused);
@@ -34,12 +36,20 @@ public partial class GameManager : Node
     // function to quit game
     public void OnQuitGameBtnPressed()
     {
+        // button sfx
+        buttonSFX.Play();
+
+        // quit functionality
         GetTree().Quit();
     }
 
     // function to resume game
     public void OnReturnGameBtnPressed()
     {
+        // button sfx
+        buttonSFX.Play();
+
+        // pause functionality
         isPaused = !isPaused;
         EmitSignal(SignalName.GamePauseToggle, isPaused);
         GetTree().Paused = isPaused;

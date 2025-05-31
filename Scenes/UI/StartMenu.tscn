@@ -1,122 +1,28 @@
-[gd_scene load_steps=18 format=3 uid="uid://bu450rk54y3ll"]
+[gd_scene load_steps=5 format=3 uid="uid://bu450rk54y3ll"]
 
-[ext_resource type="Shader" uid="uid://bcid4rv3uq84q" path="res://Scenes/Shaders/StageShaders/Water.gdshader" id="1_7sc2f"]
+[ext_resource type="Script" uid="uid://mnnk01kgwmwb" path="res://Scenes/UI/StartMenu.cs" id="1_k44vq"]
 [ext_resource type="PackedScene" uid="uid://bprcvbu015hc4" path="res://Scenes/UI/main_menu.tscn" id="2_7sc2f"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_omsb3"]
-sky_top_color = Color(0.192209, 0.61834, 0.896268, 1)
-sky_horizon_color = Color(1, 1, 1, 1)
-
-[sub_resource type="Sky" id="Sky_gunap"]
-sky_material = SubResource("ProceduralSkyMaterial_omsb3")
-
-[sub_resource type="Environment" id="Environment_k44vq"]
-background_mode = 2
-sky = SubResource("Sky_gunap")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jeo11"]
-albedo_color = Color(0.392157, 0.392157, 0.392157, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kit3o"]
-albedo_color = Color(0.576471, 0.2, 0.572549, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f3otk"]
-albedo_color = Color(0.577787, 0.200914, 0.574019, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u4h61"]
-albedo_color = Color(0.692699, 0.503308, 0.131559, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ij777"]
-albedo_color = Color(0.694118, 0.501961, 0.133333, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kk3wy"]
-albedo_color = Color(0.694118, 0.501961, 0.133333, 1)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_3ihc8"]
-noise_type = 2
-fractal_type = 0
-cellular_distance_function = 1
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dyi3g"]
-seamless = true
-noise = SubResource("FastNoiseLite_3ihc8")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_rremj"]
-noise_type = 2
-seed = 4
-fractal_type = 0
-cellular_distance_function = 1
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ugtp5"]
-seamless = true
-noise = SubResource("FastNoiseLite_rremj")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_dcr6b"]
-render_priority = 0
-shader = ExtResource("1_7sc2f")
-shader_parameter/water_color = Color(0.232916, 0.745993, 0.981746, 1)
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_dyi3g")
-shader_parameter/noise_texture2 = SubResource("NoiseTexture2D_ugtp5")
-shader_parameter/wave_speed = 0.05
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_cyf88"]
-material = SubResource("ShaderMaterial_dcr6b")
-size = Vector2(200, 100)
-subdivide_width = 40
-subdivide_depth = 40
+[ext_resource type="PackedScene" uid="uid://bkpslchvx6d17" path="res://Scenes/Battle/Stages/OceanStage.tscn" id="2_k44vq"]
+[ext_resource type="AudioStream" uid="uid://dbtedg807oocs" path="res://Audio/650284__muzaproduction__arcade-loop.wav" id="3_omsb3"]
 
 [node name="StartMenu" type="CanvasLayer"]
+script = ExtResource("1_k44vq")
 
 [node name="StartMenuBackground" type="Node3D" parent="."]
 
-[node name="Stage" type="Node3D" parent="StartMenuBackground"]
+[node name="OceanStage" parent="StartMenuBackground" instance=ExtResource("2_k44vq")]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="StartMenuBackground/Stage"]
-transform = Transform3D(0.864757, -0.269042, 0.424041, 0, 0.844384, 0.535738, -0.50219, -0.463284, 0.730187, 0, 6.1123, 0)
-shadow_enabled = true
+[node name="ForceField" parent="StartMenuBackground/OceanStage/StageBoundary" index="8"]
+visible = false
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="StartMenuBackground/Stage"]
-environment = SubResource("Environment_k44vq")
-
-[node name="Camera3D" type="Camera3D" parent="StartMenuBackground/Stage"]
-transform = Transform3D(0.929789, 0.158073, -0.332422, 0, 0.903096, 0.42944, 0.368092, -0.399288, 0.839689, -3.45315, 8.55197, 8.11401)
-
-[node name="Floor" type="CSGCylinder3D" parent="StartMenuBackground/Stage"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2519, 0)
-material_override = SubResource("StandardMaterial3D_jeo11")
-use_collision = true
-radius = 8.0
-height = 4.0
-
-[node name="RandomBackgroundStandins" type="Node" parent="StartMenuBackground/Stage"]
-
-[node name="RandomBuilding1" type="CSGBox3D" parent="StartMenuBackground/Stage/RandomBackgroundStandins"]
-transform = Transform3D(0.941483, 0.189843, 0.278513, -0.27127, 0.917204, 0.291804, -0.200057, -0.350281, 0.91503, -22, 0, -30)
-material_override = SubResource("StandardMaterial3D_kit3o")
-size = Vector3(5, 15, 5)
-
-[node name="RandomBuilding2" type="CSGBox3D" parent="StartMenuBackground/Stage/RandomBackgroundStandins"]
-transform = Transform3D(0.810985, -0.0893958, 0.578197, -0.0793024, 0.962341, 0.260019, -0.579667, -0.256724, 0.773355, 14.8029, 0, -13.3521)
-material_override = SubResource("StandardMaterial3D_f3otk")
-size = Vector3(5, 15, 5)
-
-[node name="BackgroundStandinLeft" type="CSGBox3D" parent="StartMenuBackground/Stage/RandomBackgroundStandins"]
-transform = Transform3D(0.79451, 0, -0.607251, 0, 1, 0, 0.607251, 0, 0.79451, -28.1198, 6.4437, -35.5786)
-material_override = SubResource("StandardMaterial3D_u4h61")
-size = Vector3(1, 25, 75)
-
-[node name="BackgroundStandinRight" type="CSGBox3D" parent="StartMenuBackground/Stage/RandomBackgroundStandins"]
-transform = Transform3D(-0.783032, 0, -0.621982, 0, 1, 0, 0.621982, 0, -0.783032, 40.0641, 6.4437, -35.5786)
-material_override = SubResource("StandardMaterial3D_ij777")
-size = Vector3(1, 25, 75)
-
-[node name="BackgroundStandinCenter" type="CSGBox3D" parent="StartMenuBackground/Stage/RandomBackgroundStandins"]
-transform = Transform3D(-0.071393, 0, -0.997448, 0, 1, 0, 0.997448, 0, -0.071393, 8.89461, 6.4437, -46.8573)
-material_override = SubResource("StandardMaterial3D_kk3wy")
-size = Vector3(1, 25, 75)
-
-[node name="Water" type="MeshInstance3D" parent="StartMenuBackground/Stage"]
-mesh = SubResource("PlaneMesh_cyf88")
-skeleton = NodePath("../..")
+[node name="Camera3D" type="Camera3D" parent="StartMenuBackground"]
+transform = Transform3D(0.930539, 0, -0.366193, 0, 1, 0, 0.366193, 0, 0.930539, -5.76288, 9.30816, 16.2671)
 
 [node name="MainMenu" parent="." instance=ExtResource("2_7sc2f")]
+
+[node name="StartMenuMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_omsb3")
+volume_db = -10.0
+autoplay = true
+
+[editable path="StartMenuBackground/OceanStage"]

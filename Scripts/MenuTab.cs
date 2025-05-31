@@ -3,6 +3,8 @@ using System;
 
 public partial class MenuTab : PanelContainer
 {
+	[Export]
+    AudioStreamPlayer buttonSFX;
 	private MainMenu mainMenu;
 
 	public override void _Ready()
@@ -17,9 +19,13 @@ public partial class MenuTab : PanelContainer
 		Visible = false;                                // hide current menu
 	}
 
-	public void OnMenuReturnButtonPressed(){
+	public void OnMenuReturnButtonPressed()
+	{
 		mainMenu.SwapMenuToPrevious();
 		Visible = false;
+		
+		// button sfx
+        buttonSFX.Play();
 	}
 
 	public void LoadSceneRequest(PackedScene loadScene){

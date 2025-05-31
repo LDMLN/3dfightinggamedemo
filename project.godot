@@ -24,6 +24,13 @@ window/size/viewport_height=720
 
 project/assembly_name="3DFightingGameDemo"
 
+[file_customization]
+
+folder_colors={
+"res://Audio/": "orange",
+"res://Imported Assets/": "orange"
+}
+
 [input]
 
 Walk_Right={

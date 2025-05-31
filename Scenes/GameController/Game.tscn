@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dpi0k5j3ox765"]
+[gd_scene load_steps=8 format=3 uid="uid://dpi0k5j3ox765"]
 
 [ext_resource type="PackedScene" uid="uid://bu450rk54y3ll" path="res://Scenes/UI/StartMenu.tscn" id="1_bbe6k"]
 [ext_resource type="Script" uid="uid://bnwvd0bna2q7c" path="res://Scenes/GameController/Game.cs" id="1_w23m7"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://mkj6w33qw70a" path="res://Scenes/GameController/ToggleOnPause.cs" id="3_74ac7"]
 [ext_resource type="FontFile" uid="uid://cajb5nas2nr0u" path="res://GeneralUILooks&Themes/Exo-Bold.ttf" id="4_buolf"]
 [ext_resource type="FontFile" uid="uid://bs2jq24et147r" path="res://GeneralUILooks&Themes/Exo-Regular.ttf" id="5_ppvgl"]
+[ext_resource type="AudioStream" uid="uid://c7oaa1rxkch43" path="res://Audio/ui-button-press.wav" id="7_t7uef"]
 
 [node name="Game" type="Node3D"]
 process_mode = 3
@@ -88,6 +89,11 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("5_ppvgl")
 theme_override_font_sizes/font_size = 30
 text = "Exit"
+
+[node name="ButtonSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_t7uef")
+volume_db = 5.0
+max_polyphony = 2
 
 [connection signal="pressed" from="PauseMenu/MenuTab/HBoxContainer/VBoxContainer/ResumeGameButton" to="GameManager" method="OnReturnGameBtnPressed"]
 [connection signal="pressed" from="PauseMenu/MenuTab/HBoxContainer/VBoxContainer/ExitButton" to="GameManager" method="OnQuitGameBtnPressed"]
