@@ -11,6 +11,14 @@ public partial class CrouchingState : CharacterState
         Crouch(movementInput);
     }
 
+    public override void SpecialEnter(string name)
+	{
+		stateLabel.Text = "Crouching";
+        stateLabel.Modulate = Color.Color8(0, 255, 0, 255);
+        character.Velocity = Vector3.Zero;
+        HandleSpecialInput(name);
+	}
+
     //right now it's not doing anything that all other states aren't doing (checking left side)
     public override void Update(double delta)
     {
@@ -44,7 +52,24 @@ public partial class CrouchingState : CharacterState
         {
             Crouch(movementInput);
         }
+    }
+    
+    public override void HandleSpecialInput(string specialInputName)
+	{
+		GD.Print("Crouching State to handle special move crouch???");
+		return;
+    }
 
+    public override void ForceSpecialInputTransition(string name, State targetState)
+    {
+        if (state == targetState)
+        {
+            GD.Print("Hi, I'm Crouching State reading a special move that matches me");
+        }
+        else
+        {
+            GD.Print("Hi, I'm Crouching state, reading a special move that wants to go: " + targetState);
+        }
     }
 
     private void Crouch(string movementInput)

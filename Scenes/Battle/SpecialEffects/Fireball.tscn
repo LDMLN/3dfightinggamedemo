@@ -1,0 +1,55 @@
+[gd_scene load_steps=11 format=3 uid="uid://cigshk0syuwo3"]
+
+[ext_resource type="Script" uid="uid://c33gluwj8oxo4" path="res://Scenes/Battle/SpecialEffects/Fireball.cs" id="1_afa01"]
+[ext_resource type="Shader" uid="uid://ca7cehemp8ke0" path="res://Scenes/Shaders/SpecialEffectShaders/Fireball.gdshader" id="1_ucl5r"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_afa01"]
+radius = 0.25
+height = 1.0
+
+[sub_resource type="Gradient" id="Gradient_ucl5r"]
+offsets = PackedFloat32Array(0.194444, 1)
+colors = PackedColorArray(1, 0.176471, 0, 1, 1, 1, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_afa01"]
+gradient = SubResource("Gradient_ucl5r")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_p3cyw"]
+noise_type = 0
+frequency = 0.005
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8p2vv"]
+seamless = true
+noise = SubResource("FastNoiseLite_p3cyw")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p3cyw"]
+render_priority = 0
+shader = ExtResource("1_ucl5r")
+shader_parameter/noise_sampler = SubResource("NoiseTexture2D_8p2vv")
+shader_parameter/gradient_sampler = SubResource("GradientTexture1D_afa01")
+shader_parameter/emission_strength = 5.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_ucl5r"]
+radius = 0.22
+height = 0.45
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_afa01"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 0, 1)
+
+[node name="Fireball" type="Node3D"]
+top_level = true
+script = ExtResource("1_afa01")
+
+[node name="Outline" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_afa01")
+surface_material_override/0 = SubResource("ShaderMaterial_p3cyw")
+
+[node name="Ball" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.00726897, -0.242047)
+mesh = SubResource("SphereMesh_ucl5r")
+surface_material_override/0 = SubResource("StandardMaterial3D_afa01")

@@ -42,14 +42,16 @@ autostart = true
 [node name="PlayerHealthBar" parent="Control" instance=ExtResource("2_tjwfy")]
 layout_mode = 1
 offset_left = 17.0
+offset_top = 1.0
 offset_right = -783.0
+offset_bottom = -659.0
 
 [node name="EnemyHealthBar" parent="Control" instance=ExtResource("3_mmaj8")]
 layout_mode = 1
-offset_left = 784.0
-offset_top = 3.0
-offset_right = -16.0
-offset_bottom = -701.0
+offset_left = 785.0
+offset_top = 1.0
+offset_right = -15.0
+offset_bottom = -659.0
 script = ExtResource("5_vsu76")
 
 [node name="StartPopup" type="Panel" parent="Control"]

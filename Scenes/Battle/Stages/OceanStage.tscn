@@ -87,7 +87,7 @@ render_priority = 0
 shader = ExtResource("2_qcs6y")
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_fjhp4")
 shader_parameter/noise_speed = 0.05
-shader_parameter/dissolve_cutoff = 0.0
+shader_parameter/dissolve_cutoff = 0.05
 shader_parameter/base_color = Color(0.419608, 0, 1, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_dqiw5"]

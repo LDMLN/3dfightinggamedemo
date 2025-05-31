@@ -1,0 +1,31 @@
+[gd_scene load_steps=7 format=3 uid="uid://8qgha1u3n7s2"]
+
+[ext_resource type="Script" uid="uid://b4bpbq32ptj1t" path="res://Scenes/Battle/Characters/Shared/StateMachine/CharacterStateMachine.cs" id="1_ksvri"]
+[ext_resource type="Script" uid="uid://bneio2uy17v7n" path="res://Scenes/Battle/Characters/Shared/StateMachine/CharacterStates/IdleState.cs" id="2_a0gib"]
+[ext_resource type="Script" uid="uid://b0qml5w0xojbi" path="res://Scenes/Battle/Characters/Shared/StateMachine/CharacterStates/MovingState.cs" id="3_43i1a"]
+[ext_resource type="Script" uid="uid://c0qyam84umkuy" path="res://Scenes/Battle/Characters/Shared/StateMachine/CharacterStates/AttackingState.cs" id="4_ca5t0"]
+[ext_resource type="Script" uid="uid://uobnetftkhr7" path="res://Scenes/Battle/Characters/Shared/StateMachine/CharacterStates/CrouchingState.cs" id="5_omebp"]
+[ext_resource type="Script" uid="uid://cv18cd11r0ouv" path="res://Scenes/Battle/Characters/Shared/StateMachine/CharacterStates/JumpingState.cs" id="6_xmr5r"]
+
+[node name="CharacterStateMachine" type="Node" node_paths=PackedStringArray("initialState")]
+script = ExtResource("1_ksvri")
+initialState = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="."]
+script = ExtResource("2_a0gib")
+
+[node name="Moving" type="Node" parent="."]
+script = ExtResource("3_43i1a")
+state = 1
+
+[node name="Attacking" type="Node" parent="."]
+script = ExtResource("4_ca5t0")
+state = 2
+
+[node name="Crouching" type="Node" parent="."]
+script = ExtResource("5_omebp")
+state = 7
+
+[node name="Jumping" type="Node" parent="."]
+script = ExtResource("6_xmr5r")
+state = 4

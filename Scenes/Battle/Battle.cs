@@ -14,7 +14,7 @@ public partial class Battle : Node3D
 	{
 		battleCamera = GetNode<BattleCamera>("%BattleCamera");
 		player1 = GetNode<Character>("Character");
-		player2 = GetNode<Character>("Character2");
+		player2 = GetNode<Character>("EnemyCharacter");
 		battleStage = GetNode<Stage>("OceanStage");
 
 		// prep health bars
@@ -27,16 +27,10 @@ public partial class Battle : Node3D
 		player2Health.SetPlayer(player2);
 		player2Health.InitHealth(player2.GetMaxHealth());
 
-
-		//delete this eventually
-		player1.whichPlayer = 1;
 		//player1.SetBattleCamera(battleCamera);
 		player1.InitializeStateMachine(player2, battleCamera);
-		player2.whichPlayer = 2;
+		player2.InitializeStateMachine(player1, battleCamera);
 		//player2.SetBattleCamera(battleCamera);
-
-		//uncomment to turn on player2 movement
-		//player2.InitializeStateMachine(player1, battleCamera);
 
 		battleCamera.SetPlayers(player1, player2);
 		battleStage.BattleStart();

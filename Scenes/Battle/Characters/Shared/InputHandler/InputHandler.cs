@@ -8,8 +8,9 @@ public partial class InputHandler : Node
 {
 	//using this to stop the player2 from reading inputs atm
 	[Export] bool active = true;
+    protected Character character;
 
-    Dictionary <string, bool> cardinalMovementsHeld = new Dictionary<string, bool> { ["2"] = false, ["4"] = false, ["6"] = false, ["8"] = false };
+    Dictionary<string, bool> cardinalMovementsHeld = new Dictionary<string, bool> { ["2"] = false, ["4"] = false, ["6"] = false, ["8"] = false };
 
     ulong upPressedTime;
     ulong upReleasedTime;
@@ -48,13 +49,13 @@ public partial class InputHandler : Node
     GenericMoveList genericMoveList = new();
 
     Dictionary<string, Dictionary<string, string>> LeftSideGenericMoveList;
-
-	Dictionary<string, string> moveList = new Dictionary<string, string> { ["236"] = "FIREBALL", ["63236"] = "DRAGON-UPPER" };
+    Dictionary<string, Dictionary<string, string>> RightSideGenericMoveList;
+    Dictionary<string, Dictionary<string, string>> currentMoveDictionary;
 
 	private PlayerInput currentInput;
 	private CharacterStateMachine characterStateMachine;
 
-	const int DESIRED_FRAME_BUFFER = 8;
+	const int DESIRED_FRAME_BUFFER = 12;
 
 	//this is used so we can check if we are moving "back" into neutral...
 	//otherwise we will have a constant "input" read of "5" being inserted into the input reader...
@@ -74,6 +75,7 @@ public partial class InputHandler : Node
         GD.Print("current frame buffer: " + bufferFrames);
         startTime = Time.GetTicksMsec();
         LeftSideGenericMoveList = genericMoveList.GetLeftSideGenericMoveList();
+        RightSideGenericMoveList = genericMoveList.GetRightSideGenericMoveList();
     }
 
 
@@ -97,11 +99,26 @@ public partial class InputHandler : Node
             GD.Print("pause called");
             EmitSignal(SignalName.PauseRequested);
         }
-        
-        if (!active)
+
+        //need to do the motion check here because when a controller is plugged in, godot will constantly check
+        //and receivie JoypadMotion inputs... really messes things up.
+        if (!active || @event is InputEventJoypadMotion)
         {
             return;
         }
+
+        if (character.playerInputMethod == Character.InputMethod.Keyboard && @event is not InputEventKey)
+        {
+            return;
+        }
+
+        if (character.playerInputMethod == Character.InputMethod.Joypad && @event is InputEventKey)
+        {
+            return;
+        }
+
+        string foundMove = "";
+        
         elapsedTime = Time.GetTicksMsec() - startTime;
 
         //have to handle this here instead of inside the "translateInput" function because of how
@@ -144,7 +161,7 @@ public partial class InputHandler : Node
                 GD.Print("got a press down input!");
                 downPressedTime = elapsedTime;
                 jumped = false;
-                cardinalMovementsHeld["4"] = false;
+                cardinalMovementsHeld["2"] = false;
             }
             else if (Input.IsActionPressed("Walk_Down"))
             {
@@ -152,7 +169,7 @@ public partial class InputHandler : Node
                 if (Math.Abs((decimal)elapsedTime - downPressedTime) > bufferFrames)
                 {
                     jumped = true;
-                    cardinalMovementsHeld["4"] = true;
+                    cardinalMovementsHeld["2"] = true;
                     GD.Print("Crouch");
                 }
             }
@@ -161,7 +178,7 @@ public partial class InputHandler : Node
                 GD.Print("got a release input!");
                 GD.Print("Time now: " + elapsedTime);
                 GD.Print("when Up pressed: " + downPressedTime);
-                cardinalMovementsHeld["4"] = false;
+                cardinalMovementsHeld["2"] = false;
                 GD.Print("move up");
             }
         }
@@ -171,14 +188,14 @@ public partial class InputHandler : Node
             {
                 GD.Print("got a press down input!");
                 backPressedTime = elapsedTime;
-                cardinalMovementsHeld["2"] = false;
+                cardinalMovementsHeld["4"] = false;
             }
             else if (Input.IsActionPressed("Walk_Left"))
             {
                 GD.Print("up still pressed============");
                 if (Math.Abs((decimal)elapsedTime - backPressedTime) > bufferFrames)
                 {
-                    cardinalMovementsHeld["2"]  = true;
+                    cardinalMovementsHeld["4"]  = true;
                     GD.Print("moving back");
                 }
             }
@@ -187,7 +204,7 @@ public partial class InputHandler : Node
                 GD.Print("got a release input!");
                 GD.Print("Time now: " + elapsedTime);
                 GD.Print("when Up pressed: " + backPressedTime);
-                cardinalMovementsHeld["2"]  = false;
+                cardinalMovementsHeld["4"]  = false;
                 GD.Print("move up");
             }
         }
@@ -218,6 +235,8 @@ public partial class InputHandler : Node
         }
         
         currentInput = TranslateInput(@event);
+        GD.Print("from " + character.name + " current input movement: " + currentInput.movementInput);
+        currentMoveDictionary = character.leftSide ? LeftSideGenericMoveList : RightSideGenericMoveList;
         
         if (@event is InputEventMouseMotion && currentInput.attackInput == "" && currentInput.movementInput == "5")
         {
@@ -236,20 +255,25 @@ public partial class InputHandler : Node
             {
                 recentInputs += recentInput.attackInput;
             }
-            if (LeftSideGenericMoveList.ContainsKey(recentInputs))
+            if (currentMoveDictionary.ContainsKey(recentInputs))
             {
-                GD.Print(LeftSideGenericMoveList[recentInputs]["name"]);
+                GD.Print(character.Name + "used: " + currentMoveDictionary[recentInputs]["name"]);
+                foundMove = recentInputs;
             }
         }
-        GD.Print("recent inputs: " + recentInputs);
+        //GD.Print("recent inputs: " + recentInputs);
 
-        //GD.Print("============Printing new array===============");
-        //foreach (PlayerInput input in playerInputList)
-        //{
-        //    GD.Print(input.inputTime + ":[" + input.movementInput + "+" + input.attackInput + "]");
-        //}
-
-        characterStateMachine.PassInputToState(currentInput.movementInput, currentInput.attackInput);
+        if (foundMove != "")
+        {
+            GD.Print("caling the special Input pass function from Input Handler! From: " + character.name);
+            characterStateMachine.PassSpecialInputToState(currentMoveDictionary[foundMove]);
+            playerInputList.Clear();
+        }
+        else
+        {
+            GD.Print("calling the not a special input passing function");
+            characterStateMachine.PassInputToState(currentInput.movementInput, currentInput.attackInput);
+        }
     }
 
     private void UpdateInputBuffer(PlayerInput currentInput, bool upHeld, bool downHeld, bool forwardHeld, bool backHeld)
@@ -456,4 +480,8 @@ public partial class InputHandler : Node
 		characterStateMachine = stateMachine;
 	}
 
+    public void SetCharacter(Character currentCharacter)
+    {
+        character = currentCharacter;
+    }
 }

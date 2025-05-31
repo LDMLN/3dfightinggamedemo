@@ -10,9 +10,19 @@ public partial class Character : CharacterBody3D
 	//this is unneccessary later... right now just only works if the int is "1" 
 	[Export(PropertyHint.Range, "1,2")] public int whichPlayer;
 
-	private InputHandler characterInputHandler;
+	public PackedScene fireball = GD.Load<PackedScene>("G:/Godot4Projects/3dfightinggamedemo/Scenes/Battle/SpecialEffects/Fireball.tscn");
 
-	float movementSpeed = 5.0f;
+	private InputHandler characterInputHandler;
+	public enum InputMethod
+	{
+		Keyboard,
+		Joypad
+    }
+	public InputMethod playerInputMethod = InputMethod.Keyboard;
+	
+
+	protected float movementSpeed = 5.0f;
+	public string name = "Billy";
 	Vector3 velocity = Vector3.Zero;
 	Vector3 targetPosition = Vector3.Zero;
 
@@ -50,7 +60,8 @@ public partial class Character : CharacterBody3D
 
 	protected AnimationNodeStateMachinePlayback animStateMachine;
 
-	[Signal] public delegate void HealthChangedEventHandler(float percentage);
+	[Signal]
+	public delegate void HealthChangedEventHandler(float percentage);
 	// [Signal] public delegate void DiedEventHandler();
 
 	string cardinals = "2468";
@@ -91,6 +102,7 @@ public partial class Character : CharacterBody3D
 		characterInputHandler = GetNode<InputHandler>("%InputHandler");
 		stateMachine = GetNode<CharacterStateMachine>("%CharacterStateMachine");
 		characterInputHandler.SetStateMachine(stateMachine);
+		characterInputHandler.SetCharacter(this);
 
 		/*
 		 * Set Health and get reference to Hurt Box:

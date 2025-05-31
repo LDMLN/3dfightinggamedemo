@@ -18,6 +18,8 @@ public abstract partial class CharacterState : Node
 
     [Signal]
     public delegate void TransitionRequestedEventHandler(int From, int To, string movementInput, string attackInput);
+    [Signal]
+    public delegate void SpecialTransitionRequestedEventHandler(int From, int To, string name);
 
     //the character so that we can change velocity and things like that... maybe we just do this via signals??? 
     //actually yeah, definetly do this via signals...
@@ -50,6 +52,8 @@ public abstract partial class CharacterState : Node
     //for the Idle state that can be entered with nothing pressed at all
     public virtual void Enter() { }
 
+    public virtual void SpecialEnter(string name) { }
+
     public abstract void Exit();
 
     public virtual void Update(double delta)
@@ -64,10 +68,14 @@ public abstract partial class CharacterState : Node
 
     public abstract void HandleInput(string movementInput, string attackInput);
 
+    public virtual void HandleSpecialInput(string specialInputName) { }
+
+    public abstract void ForceSpecialInputTransition(string name, State targetState);
+
     public void SetAnimationNodes()
     {
-        animPlayer = GetNode<AnimationPlayer>("%AnimationPlayer");
-        animTree = GetNode<AnimationTree>("%AnimationTree");
+        animPlayer = character.GetNode<AnimationPlayer>("%AnimationPlayer");
+        animTree = character.GetNode<AnimationTree>("%AnimationTree");
         // Activate Animation Tree
         animTree.Active = true;
 
@@ -88,7 +96,7 @@ public abstract partial class CharacterState : Node
 
     public void SetDebugNodes()
     {
-        stateLabel = GetNode<Label>("%stateLabel");
+        stateLabel = character.GetNode<Label>("%stateLabel");
     }
 
     public void SetCharacter(Character currentCharacter)
