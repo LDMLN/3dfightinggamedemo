@@ -57,6 +57,7 @@ public partial class Character : CharacterBody3D
 	[Signal]
 	public delegate void CharacterDiedEventHandler();
 
+
 	public override void _Ready()
 	{
 		// characterMesh = GetNode<MeshInstance3D>("MeshInstance3D");
@@ -239,6 +240,11 @@ public partial class Character : CharacterBody3D
 	public MeshInstance3D GetCharacterMesh()
 	{
 		return characterMesh;
+	}
+
+	public int GetMaxHealth()
+	{
+		return _maxHealth;
 	}
 
 }
