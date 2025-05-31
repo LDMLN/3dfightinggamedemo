@@ -19,6 +19,12 @@ public partial class GenericMoveList : Resource
                     { "state", "MovingState" }
                 }
             },
+            {
+                "236P", new Dictionary<string, string>{
+                    { "name", "Fireball" },
+                    { "state", "AttackingState" }
+                }
+            }
     };
     
     public Dictionary<string, Dictionary<string, string>> GetLeftSideGenericMoveList()

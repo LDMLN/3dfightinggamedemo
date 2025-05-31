@@ -219,7 +219,6 @@ public partial class InputHandler : Node
         
         currentInput = TranslateInput(@event);
         
-
         if (@event is InputEventMouseMotion && currentInput.attackInput == "" && currentInput.movementInput == "5")
         {
             return;
@@ -229,12 +228,27 @@ public partial class InputHandler : Node
         string recentInputs = "";
         foreach (PlayerInput recentInput in playerInputList)
         {
-            recentInputs += recentInput.movementInput;
+            if (recentInput.attackInput == "")
+            {
+                recentInputs += recentInput.movementInput;
+            }
+            else
+            {
+                recentInputs += recentInput.attackInput;
+            }
             if (LeftSideGenericMoveList.ContainsKey(recentInputs))
             {
                 GD.Print(LeftSideGenericMoveList[recentInputs]["name"]);
             }
         }
+        GD.Print("recent inputs: " + recentInputs);
+
+        //GD.Print("============Printing new array===============");
+        //foreach (PlayerInput input in playerInputList)
+        //{
+        //    GD.Print(input.inputTime + ":[" + input.movementInput + "+" + input.attackInput + "]");
+        //}
+
         characterStateMachine.PassInputToState(currentInput.movementInput, currentInput.attackInput);
     }
 
@@ -248,6 +262,7 @@ public partial class InputHandler : Node
         //TODO:
         if (currentInput.movementInput != "5" && currentInput.attackInput != "")
         {
+            GD.Print("adding an attack input!" + currentInput.attackInput);
             if (playerInputList.Count > 0 && Math.Abs((decimal)playerInputList.Last().inputTime - elapsedTime) < bufferFrames)
             {
                 playerInputList.Add(currentInput);
@@ -261,6 +276,7 @@ public partial class InputHandler : Node
         //TODO: we do need someway to handle putting in neutral inputs... even without ewgf movements, it could be useful...
         else if (currentInput.movementInput != "5")
         {
+            GD.Print("adding an attack input!" + currentInput.attackInput);
             if (playerInputList.Count > 0 && Math.Abs((decimal)playerInputList.Last().inputTime - elapsedTime) < bufferFrames)
             {
                 if (cardinalMovementsHeld.ContainsKey(currentInput.movementInput) && cardinalMovementsHeld[currentInput.movementInput])
@@ -281,6 +297,7 @@ public partial class InputHandler : Node
         }
         else if (currentInput.attackInput != "")
         {
+            GD.Print("adding an attack input!" + currentInput.attackInput);
             if (playerInputList.Count > 0 && Math.Abs((decimal)playerInputList.Last().inputTime - elapsedTime) < bufferFrames)
             {
                 playerInputList.Add(currentInput);
