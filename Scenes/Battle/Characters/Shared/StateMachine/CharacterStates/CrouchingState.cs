@@ -6,7 +6,7 @@ public partial class CrouchingState : CharacterState
     public override void Enter(string movementInput, string attackInput)
     {
         stateLabel.Text = "Crouching";
-        stateLabel.Modulate = Color.Color8(0, 255,0, 255);
+        stateLabel.Modulate = Color.Color8(0, 255, 0, 255);
         character.Velocity = Vector3.Zero;
         Crouch(movementInput);
     }
@@ -40,11 +40,11 @@ public partial class CrouchingState : CharacterState
         {
             EmitSignal(SignalName.TransitionRequested, (int)State.Crouching, (int)State.Jumping, movementInput, attackInput);
         }
-        else 
+        else
         {
             Crouch(movementInput);
         }
-        
+
     }
 
     private void Crouch(string movementInput)
