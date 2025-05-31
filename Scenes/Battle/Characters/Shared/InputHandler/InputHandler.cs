@@ -9,12 +9,25 @@ public partial class InputHandler : Node
     //using this to stop the player2 from reading inputs atm
     [Export] bool active = true;
 
+    Dictionary <string, bool> cardinalMovementsHeld = new Dictionary<string, bool> { ["2"] = false, ["4"] = false, ["6"] = false, ["8"] = false };
+
     ulong upPressedTime;
     ulong upReleasedTime;
+    bool upHeld = false;
     bool jumped = false;
+
     ulong downPressedTime;
     ulong downReleasedTime;
+    bool downHeld = false;
     bool crouched = false;
+
+    ulong forwardPressedTime;
+    ulong forwardReleasedtime;
+    bool forwardHeld = false;
+
+    ulong backPressedTime;
+    ulong backReleasedTime;
+    bool backHeld = false;
 
     public struct PlayerInput
     {
@@ -28,6 +41,9 @@ public partial class InputHandler : Node
             this.attackInput = attackInput;
         }
     }
+
+    [Signal]
+    public delegate void PauseRequestedEventHandler();
 
     GenericMoveList genericMoveList = new();
 
@@ -84,6 +100,12 @@ public partial class InputHandler : Node
     // HP
     public override void _Input(InputEvent @event)
     {
+        if (Input.IsActionPressed("Pause"))
+        {
+            GD.Print("pause called");
+            EmitSignal(SignalName.PauseRequested);
+        }
+        
         if (!active)
         {
             return;
@@ -92,18 +114,22 @@ public partial class InputHandler : Node
 
         //have to handle this here instead of inside the "translateInput" function because of how
         //the "IsActionJustReleased" call works unfortunately.
-        if (Input.IsActionJustPressed("Walk_Up") || Input.IsActionJustReleased("Walk_Up") || Input.IsActionPressed("Walk_Up") || Input.IsActionJustPressed("Walk_Down"))
+        if (Input.IsActionJustPressed("Walk_Up") || Input.IsActionJustReleased("Walk_Up") || Input.IsActionPressed("Walk_Up"))
         {
             if (Input.IsActionJustPressed("Walk_Up"))
             {
                 GD.Print("got a press up input!");
                 upPressedTime = elapsedTime;
+                jumped = false;
+                cardinalMovementsHeld["8"] = false;
             }
             else if (Input.IsActionPressed("Walk_Up"))
             {
+                GD.Print("up still pressed============");
                 if (Math.Abs((decimal)elapsedTime - upPressedTime) > bufferFrames)
                 {
                     jumped = true;
+                    cardinalMovementsHeld["8"] = true;
                     GD.Print("jump Up");
                 }
             }
@@ -114,29 +140,99 @@ public partial class InputHandler : Node
                 GD.Print("when Up pressed: " + upPressedTime);
                 if (!jumped & Math.Abs((decimal)elapsedTime - upPressedTime) < bufferFrames)
                 {
+                    cardinalMovementsHeld["8"] = false;
                     GD.Print("move up");
                 }
             }
-
+        }
+        else if (Input.IsActionJustPressed("Walk_Down") || Input.IsActionJustReleased("Walk_Down") || Input.IsActionPressed("Walk_Down"))
+        {
             if (Input.IsActionJustPressed("Walk_Down"))
             {
+                GD.Print("got a press down input!");
                 downPressedTime = elapsedTime;
+                jumped = false;
+                cardinalMovementsHeld["4"] = false;
+            }
+            else if (Input.IsActionPressed("Walk_Down"))
+            {
+                GD.Print("up still pressed============");
+                if (Math.Abs((decimal)elapsedTime - downPressedTime) > bufferFrames)
+                {
+                    jumped = true;
+                    cardinalMovementsHeld["4"] = true;
+                    GD.Print("Crouch");
+                }
             }
             else if (Input.IsActionJustReleased("Walk_Down"))
             {
-                downReleasedTime = elapsedTime;
+                GD.Print("got a release input!");
+                GD.Print("Time now: " + elapsedTime);
+                GD.Print("when Up pressed: " + downPressedTime);
+                cardinalMovementsHeld["4"] = false;
+                GD.Print("move up");
             }
         }
-        else
+        else if (Input.IsActionJustPressed("Walk_Left") || Input.IsActionJustReleased("Walk_Left") || Input.IsActionPressed("Walk_Left"))
         {
-            currentInput = TranslateInput(@event);
+            if (Input.IsActionJustPressed("Walk_Left"))
+            {
+                GD.Print("got a press down input!");
+                backPressedTime = elapsedTime;
+                cardinalMovementsHeld["2"] = false;
+            }
+            else if (Input.IsActionPressed("Walk_Left"))
+            {
+                GD.Print("up still pressed============");
+                if (Math.Abs((decimal)elapsedTime - backPressedTime) > bufferFrames)
+                {
+                    cardinalMovementsHeld["2"]  = true;
+                    GD.Print("moving back");
+                }
+            }
+            else if (Input.IsActionJustReleased("Walk_Left"))
+            {
+                GD.Print("got a release input!");
+                GD.Print("Time now: " + elapsedTime);
+                GD.Print("when Up pressed: " + backPressedTime);
+                cardinalMovementsHeld["2"]  = false;
+                GD.Print("move up");
+            }
         }
+        else if (Input.IsActionJustPressed("Walk_Right") || Input.IsActionJustReleased("Walk_Right") || Input.IsActionPressed("Walk_Right"))
+        {
+            if (Input.IsActionJustPressed("Walk_Right"))
+            {
+                GD.Print("got a press down input!");
+                forwardPressedTime = elapsedTime;
+                cardinalMovementsHeld["6"]  = false;
+            }
+            else if (Input.IsActionPressed("Walk_Right"))
+            {
+                GD.Print("up still pressed============");
+                if (Math.Abs((decimal)elapsedTime - downPressedTime) > bufferFrames)
+                {
+                    cardinalMovementsHeld["6"] = true;
+                    GD.Print("moving forward");
+                }
+            }
+            else if (Input.IsActionJustReleased("Walk_Right"))
+            {
+                GD.Print("got a release input!");
+                GD.Print("Time now: " + elapsedTime);
+                GD.Print("when Up pressed: " + forwardPressedTime);
+                cardinalMovementsHeld["6"] = false;
+            }
+        }
+        
+        currentInput = TranslateInput(@event);
+        
 
         if (@event is InputEventMouseMotion && currentInput.attackInput == "" && currentInput.movementInput == "5")
         {
             return;
         }
-        UpdateInputBuffer(currentInput);
+        UpdateInputBuffer(currentInput, upHeld, downHeld, forwardHeld, backHeld);
         //quick bit of code to prove that it works
         string recentInputs = "";
         foreach (PlayerInput recentInput in playerInputList)
@@ -150,14 +246,14 @@ public partial class InputHandler : Node
         characterStateMachine.PassInputToState(currentInput.movementInput, currentInput.attackInput);
     }
 
-    private void UpdateInputBuffer(PlayerInput currentInput)
+    private void UpdateInputBuffer(PlayerInput currentInput, bool upHeld, bool downHeld, bool forwardHeld, bool backHeld)
     {
         //this could use some more special cases, but as of right now a neutral input does not reset the input buffer
         if (currentInput.movementInput == "5")
         {
             lastMovementInputWasNeutral = true;
         }
-        //TODO: also have to fix it so that things are only added to it once pressed or if held down and another button is pressed...
+        //TODO:
         if (currentInput.movementInput != "5" && currentInput.attackInput != "")
         {
             if (playerInputList.Count > 0 && Math.Abs((decimal)playerInputList.Last().inputTime - elapsedTime) < bufferFrames)
@@ -175,7 +271,15 @@ public partial class InputHandler : Node
         {
             if (playerInputList.Count > 0 && Math.Abs((decimal)playerInputList.Last().inputTime - elapsedTime) < bufferFrames)
             {
-                playerInputList.Add(currentInput);
+                if (cardinalMovementsHeld.ContainsKey(currentInput.movementInput) && cardinalMovementsHeld[currentInput.movementInput])
+                {
+                    int lastHeldIndex = FindMostRecentXInputInInputList(playerInputList, currentInput.movementInput);
+                    playerInputList[lastHeldIndex] = currentInput;
+                }
+                else
+                {
+                    playerInputList.Add(currentInput);
+                }
             }
             else
             {
@@ -203,6 +307,20 @@ public partial class InputHandler : Node
         }
     }
 
+    private static int FindMostRecentXInputInInputList(List<PlayerInput> playerInputList, string movementInput)
+    {
+        for (int currentIndex = playerInputList.Count() - 1; currentIndex > -1; currentIndex--)
+        {
+            if (playerInputList[currentIndex].movementInput == movementInput)
+            {
+                return currentIndex;
+            }
+        }
+        //-1?
+        return 0;
+    }
+
+
     public PlayerInput TranslateInput(InputEvent @event)
     {
         return new PlayerInput(GetMovementInput(@event), GetAttackInput(@event), elapsedTime);
@@ -217,7 +335,7 @@ public partial class InputHandler : Node
 		float depthAxis = Input.GetAxis("Walk_Down", "Walk_Up");
 		float horizontalAxis = Input.GetAxis("Walk_Left", "Walk_Right");
 
-		bool up = depthAxis > 0;
+        bool up = depthAxis > 0;
 		bool down = depthAxis < 0;
 		bool right = horizontalAxis > 0;
 		bool left = horizontalAxis < 0;

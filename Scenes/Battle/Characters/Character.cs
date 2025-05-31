@@ -31,18 +31,10 @@ public partial class Character : CharacterBody3D
 
 	public bool leftSide;
 
-	// StandardMaterial3D baseColorMat = new StandardMaterial3D();
-	// StandardMaterial3D attackRedMat = new StandardMaterial3D() { AlbedoColor = new Color(1.0f, 0.0f, 0.0f) };
-	// private MeshInstance3D characterMesh = new();
-
-	//didn't end up needing
-	//string[] movementInputs = {"Walk_Right", "Walk_Left", "Walk_Up", "Walk_Down"};
-	//string[] attackInputs = {"Punch", "Heavy_Punch", "Kick", "Heavy_Kick"};
-
-	//this is the center of the player model, used for camera since model transform is currently set at the feet.
 	private Node3D characterCenter;
 
-	string cardinals = "2468";
+	[Signal]
+	public delegate void CharacterDiedEventHandler();
 
 	public override void _Ready()
 	{
@@ -85,7 +77,7 @@ public partial class Character : CharacterBody3D
 
 	private void Died()
 	{
-		//implement a signal here for Battle to interact with.
+		EmitSignal(SignalName.CharacterDied);
 	}
 
 	public Node3D GetCharacterCenter()
