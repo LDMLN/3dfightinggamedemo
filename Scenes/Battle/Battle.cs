@@ -7,6 +7,8 @@ public partial class Battle : Node3D
 	Character player1;
 	Character player2;
 	Stage battleStage;
+	HealthBar player1Health;
+	HealthBar player2Health;
 
 	public override void _Ready()
 	{
@@ -15,13 +17,24 @@ public partial class Battle : Node3D
 		player2 = GetNode<Character>("Character2");
 		battleStage = GetNode<Stage>("OceanStage");
 
+		// prep health bars
+		player1Health = GetNode<HealthBar>("HUD/Control/PlayerHealthBar");
+		player2Health = GetNode<HealthBar>("HUD/Control/EnemyHealthBar");
+
+		player1Health.SetPlayer(player1);
+		player1Health.InitHealth(player1.GetMaxHealth());
+		
+		player2Health.SetPlayer(player2);
+		player2Health.InitHealth(player2.GetMaxHealth());
+
+
 		//delete this eventually
 		player1.whichPlayer = 1;
 		//player1.SetBattleCamera(battleCamera);
 		player1.InitializeStateMachine(player2, battleCamera);
 		player2.whichPlayer = 2;
 		//player2.SetBattleCamera(battleCamera);
-		
+
 		//uncomment to turn on player2 movement
 		//player2.InitializeStateMachine(player1, battleCamera);
 
