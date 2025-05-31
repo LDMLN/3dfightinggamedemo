@@ -48,15 +48,10 @@ public partial class Character : CharacterBody3D
 	private bool _isDead;
 	private Area3D _hurtBox;
 
+	protected AnimationNodeStateMachinePlayback animStateMachine;
+
 	[Signal] public delegate void HealthChangedEventHandler(float percentage);
 	// [Signal] public delegate void DiedEventHandler();
-
-	/*
-	 * For testing hitboxes and hurtboxes:
-	 */
-	private StandardMaterial3D baseColorMat;
-	private StandardMaterial3D flashRedMat = new StandardMaterial3D() { AlbedoColor = new Color(1.0f, 0.0f, 0.0f) };
-	private float flashDuration = 0.2f;
 
 	string cardinals = "2468";
 	[Signal]
@@ -73,10 +68,22 @@ public partial class Character : CharacterBody3D
 		animTree = GetNode<AnimationTree>("AnimationTree");
 		characterMesh = GetNode<MeshInstance3D>("%Guard02");
 
-		/*
-		 * For testing hitboxes and hurtboxes:
-		 */
-		baseColorMat = (StandardMaterial3D)characterMesh.GetSurfaceOverrideMaterial(0);
+		// Activate Animation Tree
+		animTree.Active = true;
+
+		// Get state machine playback controller from Animation Tree:
+		try
+		{
+			animStateMachine = (AnimationNodeStateMachinePlayback)animTree.Get("parameters/playback");
+			if (animStateMachine == null)
+			{
+				GD.PrintErr("Failed to get AnimationNodeStateMachinePlayback!");
+			}
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr($"Exception when getting StateMachine playback: {e.Message}");
+		}
 
 		characterCenter = GetNode<Node3D>("%CharacterCenter");
 
@@ -129,11 +136,6 @@ public partial class Character : CharacterBody3D
 		_currentHealth = Mathf.Max(_currentHealth - amount, 0);
 		InterruptActions();
 
-		/*
-		 * For testing hitboxes and hurtboxes:
-		 */
-		// FlashRed();
-
 		EmitSignal(SignalName.HealthChanged, (float)_currentHealth / _maxHealth);
 
 		if (_currentHealth == 0)
@@ -151,27 +153,13 @@ public partial class Character : CharacterBody3D
 		}
 		else
 		{
-			if (animPlayer != null)
+			if (animPlayer != null && animTree != null && animStateMachine != null)
 			{
 				// Play hit animation
+				animStateMachine.Travel("Hit");
 			}
 		}
 	}
-
-	/*
-	 * For testing hitboxes and hurtboxes:
-	 */
-	// private async void FlashRed()
-	// {
-	// 	if (characterMesh == null || flashRedMat == null || baseColorMat == null)
-	// 	{
-	// 		return;
-	// 	}
-
-	// 	characterMesh.SetSurfaceOverrideMaterial(0, flashRedMat);
-	// 	await ToSignal(GetTree().CreateTimer(flashDuration), SceneTreeTimer.SignalName.Timeout);
-	// 	characterMesh.SetSurfaceOverrideMaterial(0, baseColorMat);
-	// }
 
 	/// <summary>
 	/// Interrupts active actions -- called when a character takes damage.

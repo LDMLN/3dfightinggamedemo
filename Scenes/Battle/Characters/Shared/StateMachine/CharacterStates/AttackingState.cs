@@ -82,24 +82,18 @@ public partial class AttackingState : CharacterState
 		{
 			if (attackInput == "P")
 			{
-				//punch animation
-				//do hitbox/hurtbox for punch attack logic
-				//GD.Print("Punch!");
 				attackAnimation = "Jab Punch";
 			}
 			else if (attackInput == "HP")
 			{
-				//GD.Print("Heavy Punch!");
 				attackAnimation = "Hook Punch";
 			}
 			else if (attackInput == "K")
 			{
-				//GD.Print("Kick!");
 				attackAnimation = "Kick";
 			}
 			else
 			{
-				//GD.Print("Heavy Kick!");
 				attackAnimation = "Roundhouse Kick";
 			}
 		}

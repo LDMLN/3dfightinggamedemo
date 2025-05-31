@@ -5,16 +5,16 @@ public partial class MovingState : CharacterState
 {
 	Vector3 velocity = Vector3.Zero;
 
-    public override void Enter(string movementInput, string attackInput)
-    {
-        //GD.Print("Enter(Inputs version!): movement: " + movementInput, "\nattack: " + attackInput);
-        stateLabel.Text = "Moving";
-        stateLabel.Modulate = Color.Color8(255, 0, 255, 255);
-        //we are only concered with THIS movement, the button just pressed. nothing previous matters (yet)
-        velocity = Vector3.Zero;
-        //we are passing the previous input into the handleInput so that it can react to what was pressed that triggered Idle->Move state transition
-        HandleMovement(movementInput);
-    }
+	public override void Enter(string movementInput, string attackInput)
+	{
+		//GD.Print("Enter(Inputs version!): movement: " + movementInput, "\nattack: " + attackInput);
+		stateLabel.Text = "Moving";
+		stateLabel.Modulate = Color.Color8(255, 0, 255, 255);
+		//we are only concered with THIS movement, the button just pressed. nothing previous matters (yet)
+		velocity = Vector3.Zero;
+		//we are passing the previous input into the handleInput so that it can react to what was pressed that triggered Idle->Move state transition
+		HandleMovement(movementInput);
+	}
 
 	//right now it's not doing anything that all other states aren't doing (checking left side)
 	public override void Update(double delta)
@@ -52,7 +52,7 @@ public partial class MovingState : CharacterState
 			}
 			else if (movementInput == "1" || movementInput == "3")
 			{
-				EmitSignal(SignalName.TransitionRequested, (int)State.Moving, (int)State.Crouching, movementInput, attackInput); 
+				EmitSignal(SignalName.TransitionRequested, (int)State.Moving, (int)State.Crouching, movementInput, attackInput);
 			}
 		}
 	}
@@ -70,24 +70,24 @@ public partial class MovingState : CharacterState
 		//if held, switch to jumping state...not implemented
 		if (movementInput == "8")
 		{
-			strafeSpeed = character.leftSide ? 1 : -1 ;
-			blendPosition = character.leftSide ? new Vector2(-1, 0): new Vector2(1, 0); // Left in BlendSpace
+			strafeSpeed = character.leftSide ? 1 : -1;
+			blendPosition = character.leftSide ? new Vector2(-1, 0) : new Vector2(1, 0); // Left in BlendSpace
 		}
 		//if held, switch to crouching state... not implemented
 		else if (movementInput == "2")
 		{
 			strafeSpeed = character.leftSide ? -1 : 1;
-			blendPosition = character.leftSide ? new Vector2(1, 0) : new Vector2(1,0); // Right in BlendSpace
+			blendPosition = character.leftSide ? new Vector2(1, 0) : new Vector2(1, 0); // Right in BlendSpace
 		}
 		else if (movementInput == "6")
 		{
-			horizontalSpeed = character.leftSide ? 1 : -1 ;
+			horizontalSpeed = character.leftSide ? 1 : -1;
 			blendPosition = character.leftSide ? new Vector2(0, 1) : new Vector2(0, -1); // Forward in BlendSpace
 		}
 		else if (movementInput == "4")
 		{
 			horizontalSpeed = character.leftSide ? -1 : 1;
-			blendPosition = character.leftSide ? new Vector2(0, -1): new Vector2(0, 1); // Backward in BlendSpace
+			blendPosition = character.leftSide ? new Vector2(0, -1) : new Vector2(0, 1); // Backward in BlendSpace
 		}
 		else
 		{
