@@ -7,6 +7,7 @@ public partial class MainMenu : Control
 {
     [Export]
     AudioStreamPlayer buttonSFX;
+    
 
     //Holds indexes of menus
     List<int> goBacklist = new();
@@ -17,24 +18,28 @@ public partial class MainMenu : Control
         base._Ready();
 
         // set up gameController
-        if(GetParent().GetParent() is Game){
-			gameController = GetParent().GetParent() as Game;
-		}
+        if (GetParent().GetParent() is Game)
+        {
+            gameController = GetParent().GetParent() as Game;
+        }
     }
 
     // function to go to other menus
-    public void SwapMenu(int menuIndex, int returnIndex){
-        if(GetChild(menuIndex) is MenuTab menuTab){
+    public void SwapMenu(int menuIndex, int returnIndex)
+    {
+        if (GetChild(menuIndex) is MenuTab menuTab)
+        {
             menuTab.Visible = true;
         }
 
-        if(returnIndex < 0) return;
+        if (returnIndex < 0) return;
         goBacklist.Add(returnIndex);
     }
 
     // function go back to previous menu
-    public void SwapMenuToPrevious(){
-        if(!goBacklist.Any()) return;
+    public void SwapMenuToPrevious()
+    {
+        if (!goBacklist.Any()) return;
         SwapMenu(goBacklist[goBacklist.Count - 1], -1);
         goBacklist.RemoveAt(goBacklist.Count - 1);
     }
@@ -45,12 +50,14 @@ public partial class MainMenu : Control
     //     QueueFree();
     // }
 
-    public void OnSwapScene(PackedScene loadScene){
+    public void OnSwapScene(PackedScene loadScene)
+    {
         gameController.SceneChange(loadScene);
     }
 
     // function to quit game
-    public void OnQuitGameBtnPressed(){
+    public void OnQuitGameBtnPressed()
+    {
         // button sfx
         buttonSFX.Play();
 

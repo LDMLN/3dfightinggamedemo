@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://des888wl2d0v2"]
+
+[ext_resource type="Script" uid="uid://2ofrcepctboh" path="res://Scenes/UI/GameOver.cs" id="1_aqsr4"]
+[ext_resource type="AudioStream" uid="uid://c7oaa1rxkch43" path="res://Audio/ui-button-press.wav" id="2_3i1jp"]
+[ext_resource type="Script" uid="uid://b07r68s2swqis" path="res://Scripts/MenuTab.cs" id="3_qm61i"]
+[ext_resource type="FontFile" uid="uid://bs2jq24et147r" path="res://GeneralUILooks&Themes/Exo-Regular.ttf" id="5_vxr00"]
+
+[node name="GameOver" type="CanvasLayer"]
+process_mode = 2
+script = ExtResource("1_aqsr4")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ButtonSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_3i1jp")
+volume_db = -9.345
+max_polyphony = 2
+
+[node name="MenuTab" type="PanelContainer" parent="." node_paths=PackedStringArray("buttonSFX")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_qm61i")
+buttonSFX = NodePath("../ButtonSFX")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuTab"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Seperator" type="Control" parent="MenuTab/VBoxContainer"]
+layout_mode = 2
+
+[node name="GameTitle" type="Label" parent="MenuTab/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 24
+theme_override_font_sizes/font_size = 100
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuTab"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuTab/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="Seperator2" type="Control" parent="MenuTab/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Seperator3" type="Control" parent="MenuTab/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PlayAgainButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_vxr00")
+theme_override_font_sizes/font_size = 30
+text = "Play Again"
+
+[node name="ExitButton" type="Button" parent="MenuTab/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 32)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_vxr00")
+theme_override_font_sizes/font_size = 30
+text = "Exit"
+
+[connection signal="pressed" from="MenuTab/HBoxContainer/VBoxContainer/PlayAgainButton" to="." method="OnPlayAgainBtnPressed"]
+[connection signal="pressed" from="MenuTab/HBoxContainer/VBoxContainer/ExitButton" to="." method="OnQuitGameBtnPressed"]

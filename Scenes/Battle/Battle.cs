@@ -9,6 +9,9 @@ public partial class Battle : Node3D
 	Stage battleStage;
 	HealthBar player1Health;
 	HealthBar player2Health;
+	
+	[Signal]
+	public delegate void BattleReadyEventHandler();
 
 	public override void _Ready()
 	{
@@ -23,7 +26,7 @@ public partial class Battle : Node3D
 
 		player1Health.SetPlayer(player1);
 		player1Health.InitHealth(player1.GetMaxHealth());
-		
+
 		player2Health.SetPlayer(player2);
 		player2Health.InitHealth(player2.GetMaxHealth());
 
@@ -31,6 +34,8 @@ public partial class Battle : Node3D
 		player1.InitializeStateMachine(player2, battleCamera);
 		player2.InitializeStateMachine(player1, battleCamera);
 		//player2.SetBattleCamera(battleCamera);
+
+		EmitSignal(SignalName.BattleReady);
 
 		battleCamera.SetPlayers(player1, player2);
 		battleStage.BattleStart();

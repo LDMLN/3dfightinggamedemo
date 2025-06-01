@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dpi0k5j3ox765"]
+[gd_scene load_steps=9 format=3 uid="uid://dpi0k5j3ox765"]
 
 [ext_resource type="PackedScene" uid="uid://bu450rk54y3ll" path="res://Scenes/UI/StartMenu.tscn" id="1_bbe6k"]
 [ext_resource type="Script" uid="uid://bnwvd0bna2q7c" path="res://Scenes/GameController/Game.cs" id="1_w23m7"]
@@ -7,18 +7,25 @@
 [ext_resource type="FontFile" uid="uid://cajb5nas2nr0u" path="res://GeneralUILooks&Themes/Exo-Bold.ttf" id="4_buolf"]
 [ext_resource type="FontFile" uid="uid://bs2jq24et147r" path="res://GeneralUILooks&Themes/Exo-Regular.ttf" id="5_ppvgl"]
 [ext_resource type="AudioStream" uid="uid://c7oaa1rxkch43" path="res://Audio/ui-button-press.wav" id="7_t7uef"]
+[ext_resource type="PackedScene" uid="uid://des888wl2d0v2" path="res://Scenes/UI/game_over.tscn" id="8_7vq3r"]
 
 [node name="Game" type="Node3D"]
 process_mode = 3
 script = ExtResource("1_w23m7")
 
-[node name="GameManager" type="Node" parent="."]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("buttonSFX")]
 script = ExtResource("2_ppvgl")
+buttonSFX = NodePath("../ButtonSFX")
+
+[node name="GameOver" parent="." instance=ExtResource("8_7vq3r")]
+layer = 3
+visible = false
 
 [node name="StartMenu" parent="." instance=ExtResource("1_bbe6k")]
 
 [node name="PauseMenu" type="CanvasLayer" parent="."]
 process_mode = 2
+layer = 2
 visible = false
 script = ExtResource("3_74ac7")
 
@@ -76,13 +83,6 @@ theme_override_fonts/font = ExtResource("5_ppvgl")
 theme_override_font_sizes/font_size = 30
 text = "Resume"
 
-[node name="OptionsButton" type="Button" parent="PauseMenu/MenuTab/HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(120, 32)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("5_ppvgl")
-theme_override_font_sizes/font_size = 30
-text = "Options"
-
 [node name="ExitButton" type="Button" parent="PauseMenu/MenuTab/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(120, 32)
 layout_mode = 2
@@ -96,4 +96,6 @@ volume_db = 5.0
 max_polyphony = 2
 
 [connection signal="pressed" from="PauseMenu/MenuTab/HBoxContainer/VBoxContainer/ResumeGameButton" to="GameManager" method="OnReturnGameBtnPressed"]
-[connection signal="pressed" from="PauseMenu/MenuTab/HBoxContainer/VBoxContainer/ExitButton" to="GameManager" method="OnQuitGameBtnPressed"]
+[connection signal="pressed" from="PauseMenu/MenuTab/HBoxContainer/VBoxContainer/ExitButton" to="." method="OnQuitGameBtnPressed"]
+
+[editable path="GameOver"]

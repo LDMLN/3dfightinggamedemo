@@ -12,7 +12,8 @@
 vertices = PackedVector3Array(-7.15213, 1.08786, -5.64857, -7.15213, 1.08786, 7.60143, 7.09787, 1.08786, 7.60143, 7.09787, 1.08786, -5.64857)
 polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 
-[node name="Battle" type="Node3D"]
+[node name="BattleVsEnemy" type="Node3D"]
+process_mode = 1
 script = ExtResource("1_a56si")
 
 [node name="BattleCamera" parent="." instance=ExtResource("2_3lmes")]
@@ -23,7 +24,6 @@ transform = Transform3D(1, 0, 0, 0, 0.953407, 0.301688, 0, -0.301688, 0.953407, 
 
 [node name="Character" parent="." instance=ExtResource("4_uivuw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.16612, 3.2, 0)
-collision_mask = 5
 whichPlayer = 1
 
 [node name="Enemy" parent="." instance=ExtResource("5_ya7lh")]
@@ -42,5 +42,5 @@ size = Vector3(10, 1, 10)
 
 [node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_3lmes")
-volume_db = -7.0
+volume_db = -10.0
 autoplay = true

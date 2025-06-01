@@ -1,12 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bu450rk54y3ll"]
+[gd_scene load_steps=4 format=3 uid="uid://bu450rk54y3ll"]
 
-[ext_resource type="Script" uid="uid://mnnk01kgwmwb" path="res://Scenes/UI/StartMenu.cs" id="1_k44vq"]
 [ext_resource type="PackedScene" uid="uid://bprcvbu015hc4" path="res://Scenes/UI/main_menu.tscn" id="2_7sc2f"]
 [ext_resource type="PackedScene" uid="uid://bkpslchvx6d17" path="res://Scenes/Battle/Stages/OceanStage.tscn" id="2_k44vq"]
 [ext_resource type="AudioStream" uid="uid://dbtedg807oocs" path="res://Audio/650284__muzaproduction__arcade-loop.wav" id="3_omsb3"]
 
 [node name="StartMenu" type="CanvasLayer"]
-script = ExtResource("1_k44vq")
 
 [node name="StartMenuBackground" type="Node3D" parent="."]
 
@@ -22,7 +20,7 @@ transform = Transform3D(0.930539, 0, -0.366193, 0, 1, 0, 0.366193, 0, 0.930539, 
 
 [node name="StartMenuMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_omsb3")
-volume_db = -39.586
+volume_db = -15.0
 autoplay = true
 
 [editable path="StartMenuBackground/OceanStage"]

@@ -9,6 +9,9 @@ public partial class BattleVsEnemy : Battle
     Stage battleStage;
     HealthBar playerHealth;
 	HealthBar enemyHealth;
+
+    [Signal]
+	public delegate void BattleReadyEventHandler();
     
     public override void _Ready()
     {
@@ -18,14 +21,14 @@ public partial class BattleVsEnemy : Battle
         battleStage = GetNode<Stage>("OceanStage");
 
         // prep health bars
-		playerHealth = GetNode<HealthBar>("HUD/Control/PlayerHealthBar");
-		enemyHealth = GetNode<HealthBar>("HUD/Control/EnemyHealthBar");
+        playerHealth = GetNode<HealthBar>("HUD/Control/PlayerHealthBar");
+        enemyHealth = GetNode<HealthBar>("HUD/Control/EnemyHealthBar");
 
         playerHealth.SetPlayer(player1);
-		playerHealth.InitHealth(player1.GetMaxHealth());
-		
-		enemyHealth.SetPlayer(player2);
-		enemyHealth.InitHealth(player2.GetMaxHealth());
+        playerHealth.InitHealth(player1.GetMaxHealth());
+
+        enemyHealth.SetPlayer(player2);
+        enemyHealth.InitHealth(player2.GetMaxHealth());
 
         player1.whichPlayer = 1;
         player1.InitializeStateMachine(player2, battleCamera);
@@ -46,6 +49,8 @@ public partial class BattleVsEnemy : Battle
                 state.SetAgent(navAgent);
             }
         }
+
+        EmitSignal(SignalName.BattleReady);
 
         battleCamera.SetPlayers(player1, player2);
         battleStage.BattleStart();

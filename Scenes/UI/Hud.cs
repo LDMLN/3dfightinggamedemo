@@ -6,6 +6,8 @@ public partial class Hud : CanvasLayer
 
     [Signal]
     public delegate void HealthDepletedEventHandler();
+    [Signal]
+    public delegate void TimeUpEventHandler();
 
     [Export]
     public int health;
@@ -90,6 +92,6 @@ public partial class Hud : CanvasLayer
     {
         endGamePopup.Show();
         GD.Print("Time's up!");
-        // Optional: emit signal or transition scene or whatever we want to do when time's up
+        EmitSignal(nameof(TimeUp));
     }
 }

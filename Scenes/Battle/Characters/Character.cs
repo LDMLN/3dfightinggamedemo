@@ -163,6 +163,9 @@ public partial class Character : CharacterBody3D
 			{
 				_hurtBox.SetDeferred("monitorable", false);
 			}
+
+			// emit death signal
+			Died();
 		}
 		else
 		{
