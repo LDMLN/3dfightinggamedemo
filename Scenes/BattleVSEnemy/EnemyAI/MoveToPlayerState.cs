@@ -4,7 +4,7 @@ using System;
 public partial class MoveToPlayerState : NodeState
 {
     [Export]
-    public float Speed = 3.0f;
+    public float Speed = 1.5f;
     [Export]
     public float Gravity = 9.8f;
     [Export]
@@ -44,7 +44,7 @@ public partial class MoveToPlayerState : NodeState
         if (direction.Length() > 0.1f)
             _owner.LookAt(_target.GlobalTransform.Origin, Vector3.Up);
 
-        GD.Print($"Distance to target: {_owner.GlobalTransform.Origin.DistanceTo(_target.GlobalTransform.Origin)}");
+        //GD.Print($"Distance to target: {_owner.GlobalTransform.Origin.DistanceTo(_target.GlobalTransform.Origin)}");
     }
 
     public override void _OnNextTransitions()
@@ -52,7 +52,7 @@ public partial class MoveToPlayerState : NodeState
         float distanceToPlayer = _owner.GlobalTransform.Origin.DistanceTo(_target.GlobalTransform.Origin);
         if (distanceToPlayer <= AttackRange)
         {
-            EmitSignal(SignalName.Transition, "attack");
+            EmitSignal(SignalName.Transition, "AttackState");
         }
     }
 

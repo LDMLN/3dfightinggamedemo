@@ -68,6 +68,9 @@ public partial class Character : CharacterBody3D
 	[Signal]
 	public delegate void CharacterDiedEventHandler();
 
+	public Area3D GetHitBox() => _hitBox;
+	public Area3D GetHurtBox() => _hurtBox;
+
 
 	public override void _Ready()
 	{
@@ -146,6 +149,7 @@ public partial class Character : CharacterBody3D
 	/// <param name="amount">The amount of damage to apply.</param>
 	public void TakeDamage(int amount)
 	{
+		GD.Print("Current Health: ", _currentHealth);
 		_currentHealth = Mathf.Max(_currentHealth - amount, 0);
 		InterruptActions();
 
