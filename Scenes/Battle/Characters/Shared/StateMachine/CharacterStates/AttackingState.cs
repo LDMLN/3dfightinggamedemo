@@ -3,7 +3,7 @@ using System;
 
 public partial class AttackingState : CharacterState
 {
-	StandardMaterial3D attackRedMat = new StandardMaterial3D() { AlbedoColor = new Color(1.0f, 0.0f, 0.0f) };
+	// StandardMaterial3D attackRedMat = new StandardMaterial3D() { AlbedoColor = new Color(1.0f, 0.0f, 0.0f) };
 	/*
 	 * For potential use later:
 	 */
@@ -13,12 +13,12 @@ public partial class AttackingState : CharacterState
 	public override void Enter(string movementInput, string attackInput)
 	{
 		stateLabel.Text = "Attacking";
-		stateLabel.Modulate = Color.Color8(255, 0, 0, 255);
+		// stateLabel.Modulate = Color.Color8(255, 0, 0, 255);
 		//this is probably unnecessary since MoveAndSlide is not called in this state...
 		//but just to be safe
 		//we might have some attacks with slight forward/backward movement??
 		character.Velocity = Vector3.Zero;
-		characterMesh.SetSurfaceOverrideMaterial(0, attackRedMat);
+		// characterMesh.SetSurfaceOverrideMaterial(0, attackRedMat);
 
 		/*
 		 * For potential use later:
@@ -31,12 +31,12 @@ public partial class AttackingState : CharacterState
 	public override void SpecialEnter(string name)
 	{
 		stateLabel.Text = "Attacking";
-		stateLabel.Modulate = Color.Color8(255, 0, 0, 255);
+		// stateLabel.Modulate = Color.Color8(255, 0, 0, 255);
 		//this is probably unnecessary since MoveAndSlide is not called in this state...
 		//but just to be safe
 		//we might have some attacks with slight forward/backward movement??
 		character.Velocity = Vector3.Zero;
-		characterMesh.SetSurfaceOverrideMaterial(0, attackRedMat);
+		// characterMesh.SetSurfaceOverrideMaterial(0, attackRedMat);
 
 		/*
 		 * For potential use later:
@@ -87,7 +87,7 @@ public partial class AttackingState : CharacterState
 			}
 		}
 	}
-	
+
 	public override void HandleSpecialInput(string specialInputName)
 	{
 		GD.Print("Attacking state has to handle special moves Fireball");
@@ -98,7 +98,7 @@ public partial class AttackingState : CharacterState
 		inst.SetDirectionToEnemy(directionToEnemy);
 		inst.LookAt(enemyCharacter.GetCharacterCenter().GlobalPosition);
 		EmitSignal(SignalName.SpecialTransitionRequested, (int)State.Attacking, (int)State.Idle, specialInputName);
-    }
+	}
 
 	public override void ForceSpecialInputTransition(string name, State targetState)
 	{
