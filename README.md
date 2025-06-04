@@ -41,6 +41,8 @@ This project was developed as part of our Capstone course to learn and explore c
 - 90's Game Loop.wav by furbyguy -- https://freesound.org/s/388101/ -- License: Creative Commons 0
 - Arcade Loop by MuzaProduction -- https://freesound.org/s/650284/ -- License: Attribution NonCommercial 4.0
 - UI Button Press by el_boss -- https://freesound.org/s/788611/ -- License: Creative Commons 0
+- fresnel: https://godotshaders.com/snippet/fresnel/
+- brazilian tutorial for rest of the visuals: https://www.youtube.com/watch?v=zdcvmBKVil8&ab_channel=MerliGameDev
 
 ## License
 
